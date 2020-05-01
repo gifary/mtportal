@@ -1,0 +1,119 @@
+@extends('layouts.master')
+@section('title', 'Base inputs | Martechportal')
+@section('style')
+
+@endsection
+
+@section('breadcrumb-title', 'Contact Person')
+@section('breadcrumb-items')
+<li class="breadcrumb-item">Home</li>
+<li class="breadcrumb-item">Business Account</li>
+<li class="breadcrumb-item active">Contact Person</li>
+@endsection
+  
+@section('content')
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>Add New Contact</h5>
+        </div>
+
+        <form action="{{ route('contact.store') }}" method="POST">
+        
+        {{ csrf_field() }}
+
+
+          <div class="card-body">
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="name">Name</label>
+                  <input required class="form-control" id="name" name="name" type="text" placeholder="Enter Name">
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-group">
+                  <label for="email">Email</label>
+                  <input required class="form-control" id="email" name="email" type="email" placeholder="Enter Email">
+                </div>
+              </div>
+
+            </div>
+
+            
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="position">position</label>
+                  <input required class="form-control" id="position" name="position" type="username" placeholder="position">
+                </div>
+              </div>
+
+              <div class="col">
+                <div class="form-group">
+                  <label for="phone">phone</label>
+                  <input required class="form-control" id="phone"  name="phone" type="number" placeholder="Phone Number">
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group">
+                  <label for="department">department</label>
+
+                  <select id="department" name="department">
+                    <option value="Demo Department 1">
+                      Demo Department 1
+                    </option>
+                     <option value="Demo Department 1">
+                      Demo Department 2
+                    </option>
+                     <option value="Demo Department 1">
+                      Demo Department 3
+                    </option> 
+                    <option value="Demo Department 1">
+                      Demo Department 4
+                    </option> 
+                    <option value="Demo Department 1">
+                      Demo Department 5
+                    </option>
+                  </select>
+
+
+
+                
+                </div>
+              </div>
+
+          
+
+
+    </div>
+
+          <div class="card-footer">
+          <input required type="hidden" value={{ $details[0]->id }} name="business_id" id="business_id"/>
+            <button class="btn btn-pill btn-primary" type="submit">Submit</button>
+         
+          </div>
+        </form>
+      </div>
+         
+        </form>
+
+
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+@endsection
+@section('script')
+
+@endsection

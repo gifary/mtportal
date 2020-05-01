@@ -1,0 +1,10 @@
+[2020-04-25 09:40:37] local.ERROR: There are no commands defined in the "clear" namespace. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\NamespaceNotFoundException(code: 0): There are no commands defined in the \"clear\" namespace. at /Users/gifary/Documents/web/mtportal/vendor/symfony/console/Application.php:574)
+[stacktrace]
+#0 /Users/gifary/Documents/web/mtportal/vendor/symfony/console/Application.php(625): Symfony\\Component\\Console\\Application->findNamespace('clear')
+#1 /Users/gifary/Documents/web/mtportal/vendor/symfony/console/Application.php(228): Symfony\\Component\\Console\\Application->find('clear:cache')
+#2 /Users/gifary/Documents/web/mtportal/vendor/symfony/console/Application.php(140): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#3 /Users/gifary/Documents/web/mtportal/vendor/laravel/framework/src/Illuminate/Console/Application.php(93): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#4 /Users/gifary/Documents/web/mtportal/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#5 /Users/gifary/Documents/web/mtportal/artisan(37): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#6 {main}
+"} 
