@@ -9,6 +9,6 @@ class TicketAttachment extends Model
     protected $fillable = [
 		'ticket_id',
 		'attachment_title',
-		'attachment'
+		'attachment',
 	];
 }

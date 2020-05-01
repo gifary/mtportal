@@ -33,7 +33,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12 col-xl-9 col-lg-9 col-md-9">
-
+                @if ($message = Session::get('error'))
+                    <div class="alert alert-danger alert-block">
+                        <button type="button" class="close" data-dismiss="alert">×</button>
+                        <strong>{{ $message }}</strong>
+                    </div>
+                @endif
                 <div class="row">
                     <div class="col-sm-6 col-xl-3 col-lg-6">
                         <div class="card o-hidden">
@@ -341,9 +346,9 @@
                                                 </div>
                                                 <div class="comments-box">
                                                     <div class="media"><img
-                                                                class="img-50 img-fluid m-r-20 rounded-circle" alt=""
-                                                                src="../assets/images/user/1.jpg" data-original-title=""
-                                                                title="">
+                                                            class="img-50 img-fluid m-r-20 rounded-circle" alt=""
+                                                            src="../assets/images/user/1.jpg" data-original-title=""
+                                                            title="">
                                                         <div class="media-body">
                                                             <div class="input-group text-box">
                                                                 <input class="form-control input-txt-bx" type="text"
@@ -356,7 +361,7 @@
                                                                             type="button"
                                                                             id="messageAdd_{{ $ticket->id }}"
                                                                             data-original-title="" title=""><i
-                                                                                class="fa fa-arrow-right"> </i></button>
+                                                                            class="fa fa-arrow-right"> </i></button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -393,7 +398,6 @@
 
                     </div>
                 </div>
-
 
             </div>
             <div class="col-sm-12 col-xl-3 col-lg-3 col-md-3 make-me-sticky">
@@ -481,7 +485,7 @@
 
     </div>
     <!-- Container-fluid Ends-->
-    <!--   modal start -->
+    <!--   modal start for add ticket -->
     <div class="modal fade" id="addTicketModal" tabindex="-1" role="document"
          aria-labelledby="addBusinessModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
@@ -489,10 +493,8 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="business">Add Ticket</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true">×</span></button>
+                            aria-hidden="true">×</span></button>
                 </div>
-
-
                 <form action="{{ route('post_ticket') }}" method="POST" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="modal-body">
@@ -508,7 +510,7 @@
                             </div>
 
                             <div class="row">
-                                <div class="col">
+                               {{-- <div class="col">
                                     <div class="form-group">
                                         <div class="form-group">
                                             <label for="start_date">Start Date</label>
@@ -517,7 +519,7 @@
                                                    id="validationCustom03" type="date" placeholder="Start Date">
                                         </div>
                                     </div>
-                                </div>
+                                </div>--}}
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="deal_size">Attachment</label>
@@ -597,20 +599,20 @@
                 success: function(data) {
                     console.log(data[0].name);
                     html+= '<div class="your-msg">\n' +
-                    '     <div class="media">\n' +
-                    '         <img class="img-50 img-fluid m-r-20 rounded-circle"\n' +
-                    '              style="margin-top: 20px;"\n' +
-                    '              alt=""\n' +
-                    '              src="http://localhost/martechportal/public/assets/images/user/lncg-logo-only.jpg"\n' +
-                    '              data-original-title="" title="">\n' +
-                    '         <div class="media-body">\n' +
-                    '         <span class="f-w-600">'+data[0].name+'\n' +
-                    '             <span>'+data[0].created_at+' </span>\n' +
-                    '         </span>\n' +
-                    '             <p>'+data[0].comment_body+'</p>\n' +
-                    '         </div>\n' +
-                    '     </div>\n' +
-                    ' </div>';
+                        '     <div class="media">\n' +
+                        '         <img class="img-50 img-fluid m-r-20 rounded-circle"\n' +
+                        '              style="margin-top: 20px;"\n' +
+                        '              alt=""\n' +
+                        '              src="http://localhost/martechportal/public/assets/images/user/lncg-logo-only.jpg"\n' +
+                        '              data-original-title="" title="">\n' +
+                        '         <div class="media-body">\n' +
+                        '         <span class="f-w-600">'+data[0].name+'\n' +
+                        '             <span>'+data[0].created_at+' </span>\n' +
+                        '         </span>\n' +
+                        '             <p>'+data[0].comment_body+'</p>\n' +
+                        '         </div>\n' +
+                        '     </div>\n' +
+                        ' </div>';
                     // console.log(html);
                     $('.social-chat').append(html);
                 }
