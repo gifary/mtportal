@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Business;
 use App\Notifications\CreateTask;
 use App\Notifications\CreateTaskAdmin;
 use App\SupportTicket;
@@ -44,7 +45,6 @@ class SupportTicketController extends Controller
                 ->toArray();
         $assignees = array_combine( $assignees, $assignees );
 
-
         return view( 'supportticket.index',compact('ticket_counts','tickets','assignees') );
     }
 
@@ -63,8 +63,8 @@ class SupportTicketController extends Controller
 
         try{
             DB::beginTransaction();
-            $data = $request->only(['title','description']);
-            $data['start_date'] = Carbon::now()->toDateString();
+            $data = $request->only(['title','description','start_date']);
+            //$data['start_date'] = Carbon::now()->toDateString();
             $data['ticket_type'] = 'New';
 
             $support_ticket = SupportTicket::create($data);
@@ -236,5 +236,43 @@ class SupportTicketController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function assigment(Request $request)
+    {
+        $term = trim($request->q);
+
+        if (empty($term)) {
+            return response()->json([]);
+        }
+
+        $users = User::where('email','LIKE',"%$term%")->orWhere('name','LIKE',"%$term%")->limit(10)->get();
+
+        $formatted_tags = [];
+
+        foreach ($users as $tag) {
+            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->name];
+        }
+
+        return response()->json($formatted_tags);
+    }
+
+    public function business(Request $request)
+    {
+        $term = trim($request->q);
+
+        if (empty($term)) {
+            return response()->json([]);
+        }
+
+        $users = Business::where('cname','LIKE',"%$term%")->limit(10)->get();
+
+        $formatted_tags = [];
+
+        foreach ($users as $tag) {
+            $formatted_tags[] = ['id' => $tag->id, 'text' => $tag->cname];
+        }
+
+        return response()->json($formatted_tags);
     }
 }

@@ -10,14 +10,9 @@ use Illuminate\Http\Request;
 
 use App\User;
 use Auth;
-use Illuminate\Support\Facades\Hash;
 use Str;
 use Redirect;
-//Importing laravel-permission models
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-
-//Enables us to output flash messaging
 use Session;
 
 class UserController extends Controller

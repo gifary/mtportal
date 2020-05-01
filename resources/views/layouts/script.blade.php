@@ -22,5 +22,12 @@
 <!-- Theme js-->
 <script src="{{asset('assets/js/script.js')}}"></script>
 <script src="{{asset('assets/js/theme-customizer/customizer.js')}}"></script>
+<script src="{{asset('assets/js/select2/select2.full.min.js')}}"></script>
+<script>
+    $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+    });
+</script>
 <!-- Plugin used-->
 @yield('script')
+@stack('push_js')

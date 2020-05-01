@@ -506,7 +506,7 @@
                             </div>
 
                             <div class="row">
-                               {{-- <div class="col">
+                                <div class="col">
                                     <div class="form-group">
                                         <div class="form-group">
                                             <label for="start_date">Start Date</label>
@@ -515,7 +515,7 @@
                                                    id="validationCustom03" type="date" placeholder="Start Date">
                                         </div>
                                     </div>
-                                </div>--}}
+                                </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="deal_size">Attachment</label>
