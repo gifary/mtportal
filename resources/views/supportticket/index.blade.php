@@ -59,6 +59,27 @@
             visibility: visible;
             opacity: 1;
         }
+        /* Styles for the comment section */
+        @media only screen
+        and (min-device-width : 320px)
+        and (max-device-width : 765px) {
+            div.comment-box > div.col-md-1{
+                display: none;
+            }
+            div.comment-box > div.col-md-3{
+                padding-top: 20px;
+                text-align: right;
+            }
+        }
+        @media only screen and (max-width: 767px)
+        {
+            .chat-box .chat-right-aside .chat .chat-msg-box { height: 400px!important; }
+        }
+
+        .chat-box .chat-right-aside .chat .chat-message{right: 0;left: 0;}
+        .chat-message{width: 100%!important}
+        .chat-box .chat-right-aside .chat .chat-msg-box .other-message{border-top-right-radius: 10px!important}
+        .comment-box{padding-top: 20px!important;padding-bottom:0px!important; }
     </style>
 @endsection
 
@@ -157,95 +178,92 @@
                                             </button>
                                         </h5>
                                     </div>
-                                    <div class="collapse" id="collapseicon-{{ $key }}" aria-labelledby="collapseicon"
-                                         data-parent="#accordionoc">
+                                    <div class="collapse" id="collapseicon-{{ $key }}" aria-labelledby="collapseicon" data-parent="#accordionoc">
                                         <div class="card-body">
-
-                                            <div class="form-group row">
-                                                <label class="col-lg-12 control-label text-lg-left" for="textinput">Detailed
-                                                    Description</label>
-                                                <div class="col-lg-12">
-                                                    <textarea id="desc" name="desc" rows="4" placeholder=""
-                                                              class="form-control">{{$ticket->description}}</textarea>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <label class="control-label text-lg-left" for="textinput">Detailed Description</label>
+                                                        <textarea id="desc" name="desc" rows="4" placeholder="" class="form-control">{{$ticket->description}}</textarea>
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 control-label text-right pt-7" for="textinput">Priority</label>
-                                                <div class="col-lg-3">
-                                                    {!! Form::select('priority', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower', 'None' => 'None'), $ticket->priority, ['id' => 'priority', 'class' => 'form-control']); !!}
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="textinput">Priority</label>
+                                                        {!! Form::select('priority', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower', 'None' => 'None'), $ticket->priority, ['id' => 'priority', 'class' => 'form-control']); !!}
+                                                    </div>
                                                 </div>
-                                                <label class="col-lg-3 control-label text-right pt-7"
-                                                       for="textinput">Status</label>
-                                                <div class="col-lg-3">
-                                                    {!! Form::select('status', array('Pending' => 'Pending', 'In Progress' => 'In Progress', 'Dismiss' => 'Dismiss', 'Completed' => 'Completed'), $ticket->status, ['id' => 'status', 'class' => 'form-control']); !!}
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="textinput">Status</label>
+                                                        {!! Form::select('status', array('Pending' => 'Pending', 'In Progress' => 'In Progress', 'Dismiss' => 'Dismiss', 'Completed' => 'Completed'), $ticket->status, ['id' => 'status', 'class' => 'form-control']); !!}
+                                                    </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 control-label text-right pt-7" for="textinput">Assigned
-                                                    By</label>
-                                                <div class="col-lg-3">
-                                                    {!! Form::select('assigned_by', $assignees, $ticket->assigned_to, ['id' => 'assigned_by', 'class' => 'form-control']); !!}
-                                                </div>
-                                                <label class="col-lg-3 control-label text-right pt-7" for="textinput">Assigned
-                                                    To</label>
-                                                <div class="col-lg-3">
-                                                    {!! Form::select('assigned_to', $assignees, $ticket->assigned_to, ['id' => 'assigned_to', 'class' => 'form-control']); !!}
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="textinput">Assigned By</label>
+                                                        {!! Form::select('assigned_by', $assignees, $ticket->assigned_to, ['id' => 'assigned_by', 'class' => 'form-control']); !!}
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 control-label text-right pt-7" for="textinput">Start
-                                                    Date</label>
-                                                <div class="col-lg-3">
-                                                    <input id="textinput" name="textinput" type="date"
-                                                           placeholder="Date" class="form-control"
-                                                           value="{{$ticket->start_date}}">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="textinput">Assigned To</label>
+                                                        {!! Form::select('assigned_to', $assignees, $ticket->assigned_to, ['id' => 'assigned_to', 'class' => 'form-control']); !!}
+                                                    </div>
                                                 </div>
-                                                <label class="col-lg-3 control-label text-right pt-7" for="textinput">Due
-                                                    Date</label>
-                                                <div class="col-lg-3">
-                                                    <input id="textinput" name="textinput" type="date"
-                                                           placeholder="Date" class="form-control"
-                                                           value="{{$ticket->due_date}}">
+
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="textinput">Start Date</label>
+                                                        <input id="textinput" name="textinput" type="date" placeholder="Date" class="form-control" value="{{$ticket->start_date}}">
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="textinput">Due Date</label>
+                                                        <input id="textinput" name="textinput" type="date" placeholder="Date" class="form-control" value="{{$ticket->due_date}}">
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                            <div class="form-group row">
-                                                <label class="col-lg-3 control-label text-right pt-7"
-                                                       for="textinput">Tier</label>
-                                                <div class="col-lg-3">
-                                                    <select id="selectbasic" name="selectbasic" class="form-control ">
-                                                        <option value="1">Option one</option>
-                                                        <option value="2">Option two</option>
-                                                    </select>
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="textinput">Tier</label>
+                                                        <select id="selectbasic" name="selectbasic" class="form-control ">
+                                                            <option value="1">Option one</option>
+                                                            <option value="2">Option two</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <label class="col-lg-3 control-label text-right pt-7"
-                                                       for="textinput">Ticket Type</label>
-                                                <div class="col-lg-3">
-                                                    <select id="ticket_type" name="ticket_type" class="form-control ">
-                                                        <option value="Open"
-                                                                @if($ticket->ticket_type === 'Open') selected @endif>
-                                                            Open
-                                                        </option>
-                                                        <option value="Assigned"
-                                                                @if($ticket->ticket_type === 'Assigned') selected @endif>
-                                                            Assigned
-                                                        </option>
-                                                        <option value="New"
-                                                                @if($ticket->ticket_type === 'New') selected @endif>New
-                                                        </option>
-                                                        <option value="Resolved"
-                                                                @if($ticket->ticket_type === 'Resolved') selected @endif>
-                                                            Resolved
-                                                        </option>
-                                                    </select>
+                                                <div class="col-4">
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="textinput">Ticket Type</label>
+                                                        <select id="ticket_type" name="ticket_type" class="form-control ">
+                                                            <option value="Open"
+                                                                    @if($ticket->ticket_type === 'Open') selected @endif>
+                                                                Open
+                                                            </option>
+                                                            <option value="Assigned"
+                                                                    @if($ticket->ticket_type === 'Assigned') selected @endif>
+                                                                Assigned
+                                                            </option>
+                                                            <option value="New"
+                                                                    @if($ticket->ticket_type === 'New') selected @endif>New
+                                                            </option>
+                                                            <option value="Resolved"
+                                                                    @if($ticket->ticket_type === 'Resolved') selected @endif>
+                                                                Resolved
+                                                            </option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                            <div class="row default-according style-1 faq-accordion"
-                                                 id="accordionoc-sub-{{ $key }}">
+                                            {{-- tab change log--}}
+                                            <div class="row default-according style-1 faq-accordion" id="accordionoc-sub-{{ $key }}">
                                                 <div class="row" style="width: 100%;">
                                                     <div class="col-lg-12">
                                                         <div class="card">
@@ -282,8 +300,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row default-according style-1 faq-accordion"
-                                                 id="accordionoc-tasks-{{ $key }}">
+                                            {{-- tab assigned tasks --}}
+                                            <div class="row default-according style-1 faq-accordion" id="accordionoc-tasks-{{ $key }}">
                                                 <div class="row" style="width: 100%;">
                                                     <div class="col-lg-12">
 
@@ -337,11 +355,10 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row default-according style-1 faq-accordion"
-                                                 id="accordionoc-attachment-{{ $key }}">
+                                            {{-- tab attachment --}}
+                                            <div class="row default-according style-1 faq-accordion" id="accordionoc-attachment-{{ $key }}">
                                                 <div class="row" style="width: 100%;">
                                                     <div class="col-lg-12">
-
                                                         <div class="card">
                                                             <div class="card-header">
                                                                 <h5 class="mb-0">
@@ -380,7 +397,100 @@
                                                 </div>
                                             </div>
                                             <!-- comments start -->
-                                            <div class="timeline-content">
+                                            <div class="row default-according style-1 faq-accordion" id="accordionoc-comment-{{ $key }}">
+                                                <div class="row" style="width: 100%;">
+                                                    <div class="col-lg-12">
+                                                        <div class="card">
+                                                            <div class="card-header">
+                                                                <h5 class="mb-0">
+                                                                    <button class="btn btn-link collapsed"
+                                                                            data-toggle="collapse"
+                                                                            data-target="#assigned-comment-{{ $key }}"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="collapseicon">
+                                                                        Comment
+                                                                    </button>
+                                                                </h5>
+                                                            </div>
+                                                            <div class="collapse" id="assigned-comment-{{ $key }}"
+                                                                 aria-labelledby="collapseicon"
+                                                                 data-parent="#accordionoc-comment-{{ $key }}">
+                                                                <div class="card-body">
+                                                                    <div class="col call-chat-body">
+                                                                        <div class="card" style="-webkit-box-shadow:1px 5px 24px 0 rgba(0, 0, 0, 0.1); box-shadow: 1px 5px 24px 0 rgba(0, 0, 0, 0.1); width:100%;">
+                                                                            <div class="card-body p-0">
+                                                                                <div id="row chat-box">
+                                                                                    <div class="col chat-right-aside" style="max-width: 100% !important; flex: 0 0 100%;">
+                                                                                        <!-- chat start-->
+                                                                                        <div class="chat">
+                                                                                            <!-- chat-header end-->
+                                                                                            <div class="chat-history chat-msg-box custom-scrollbar">
+                                                                                                <div id="comment-box" style="margin-top: 15px">
+                                                                                                    @foreach($ticket->ticket_comments as $key=>$val)
+                                                                                                        @if ($val->user_id == \Illuminate\Support\Facades\Auth::user()->id)
+                                                                                                            <div class="message my-message" style="width: 100%; border: 1px solid #e8e8e8; border-radius: 10px; margin-bottom: 15px;padding: 20px">
+                                                                                                                <img class="rounded-circle float-left chat-user-img img-30" src="{{asset($val->user->profile_pic)}}" alt="{{$val->user->name}}" style="margin-top: -30px">
+                                                                                                                <div class="message-data text-right">
+                                                                                                                    <span class="message-data-time">{{ $val->updated_at  }}, {{$val->user->name}}</span>
+                                                                                                                </div>
+                                                                                                                <p>{{$val->comment_body}}</p>
+                                                                                                                <div class="row float-right" style="background-color: #efefef; border-radius: 5px;">
+                                                                                                                    <div class="col-xs-6" style="border-right: 1px solid #dedede;">
+                                                                                                                        <a href="javascript:void(0)" class="btn  btn-xs form-inline" data-toggle="modal"
+                                                                                                                           data-target="#editLeadcomment_{{$val->id}}"
+                                                                                                                           data-whatever="@getbootstrap"><i class="icon-pencil"></i></a>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-xs-6">
+                                                                                                                        <form method="POST" action="{{url('deleteleadcomment')}}">
+                                                                                                                            @csrf
+                                                                                                                            <input type="hidden" name="commentid" value="{{$val->id}}">
+                                                                                                                            <button class="btn btn-xs form-inline" type="submit"><i class="icon-trash"></i></button>
+                                                                                                                        </form>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                            </div>
+                                                                                                        @else
+                                                                                                            <div class="message other-message pull-right" style="width: 100%;">
+                                                                                                                <img class="rounded-circle float-right chat-user-img img-30" src="{{asset($val->user->profile_pic)}}" alt="{{$val->user->name}}" style="position: absolute;z-index: 9;right: 20px;">
+                                                                                                                <div class="message-data">
+                                                                                                                    <span class="message-data-time">{{ $val->updated_at  }}, {{$val->user->name}}</span>
+                                                                                                                </div>
+                                                                                                                <p>{{$val->comment_body}}</p>
+                                                                                                            </div>
+                                                                                                            <div class="clearfix"></div>
+                                                                                                        @endif
+                                                                                                    @endforeach
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="chat-message clearfix">
+                                                                                <div class="form-group row comment-box">
+                                                                                    <div class="col-md-1">
+                                                                                        <img class="rounded-circle float-right img-40" src="{{asset($val->user->profile_pic)}}" alt="">
+                                                                                    </div>
+                                                                                    <div class="col-md-9">
+                                                                                        {{ csrf_field() }}
+                                                                                        <input type="hidden" name="ticket_id" value="{{$ticket->id}}">
+                                                                                        <input id="leadcomment" placeholder="Add Comment" class="form-control" >
+                                                                                    </div>
+                                                                                    <div class="">
+                                                                                        <button class="btn btn-pill btn-primary text-light" type="button" id="addleadcomment"><i class="icon-angle-right"></i></button>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{--<div class="timeline-content">
                                                 <div class="social-chat">
                                                     @foreach($ticket->ticket_comments as $key=>$val)
                                                         <div class="your-msg">
@@ -423,7 +533,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>--}}
                                             <!-- comments end -->
 
                                             <!-- buttons start -->

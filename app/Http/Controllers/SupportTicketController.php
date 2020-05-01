@@ -38,7 +38,7 @@ class SupportTicketController extends Controller
         $tickets                   =
             SupportTicket::with( [ 'ticket_attachments', 'ticket_comments' ] )
                 ->orderBy( 'id', 'desc' )
-                ->get();
+                ->take(1)->get();
 
         $assignees =
             User::where( 'email', '!=', Auth::user()->email )->pluck( 'email' )

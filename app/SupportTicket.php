@@ -21,12 +21,12 @@ class SupportTicket extends Model
 
 	public function ticket_attachments()
 	{
-		return $this->hasMany('App\TicketAttachment','ticket_id','id');
+		return $this->hasMany(TicketAttachment::class,'ticket_id','id');
 	}
 
 	public function ticket_comments()
 	{
-		return $this->hasMany('App\TicketComment','ticket_id','id');
+		return $this->hasMany(TicketComment::class,'ticket_id','id');
 	}
 
 	public function user(){
