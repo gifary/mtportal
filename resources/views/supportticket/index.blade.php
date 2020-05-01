@@ -1,7 +1,65 @@
 @extends('layouts.master')
-@section('title', 'Datatables Server Side | Martechportal')
+@section('title', 'All Ticket')
 @section('style')
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
+    <style>
+        .select2-container {
+            width: 100% !important;
+        }
+
+        .label-container {
+            position: fixed;
+            bottom: 48px;
+            right: 105px;
+            display: table;
+            visibility: hidden;
+        }
+
+        .label-text {
+            color: #FFF;
+            background: rgba(51, 51, 51, 0.5);
+            display: table-cell;
+            vertical-align: middle;
+            padding: 10px;
+            border-radius: 3px;
+        }
+
+        .label-arrow {
+            display: table-cell;
+            vertical-align: middle;
+            color: #333;
+            opacity: 0.5;
+        }
+
+        .float {
+            position: fixed;
+            width: 60px;
+            height: 60px;
+            bottom: 40px;
+            right: 40px;
+            background-color: #06C;
+            color: #FFF;
+            border-radius: 50px;
+            text-align: center;
+            box-shadow: 2px 2px 3px #999;
+        }
+
+        .my-float {
+            font-size: 24px;
+            margin-top: 18px;
+        }
+
+        a.float+div.label-container {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.5s ease;
+        }
+
+        a.float:hover+div.label-container {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
 @endsection
 
 @section('breadcrumb-title', 'All Tickets')
@@ -32,7 +90,7 @@
     <!-- Container-fluid starts-->
     <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12 col-xl-9 col-lg-9 col-md-9">
+            <div class="col-sm-12">
                 @if ($message = Session::get('error'))
                     <div class="alert alert-danger alert-block">
                         <button type="button" class="close" data-dismiss="alert">×</button>
@@ -85,8 +143,6 @@
                         </div>
                     </div>
                 </div>
-
-
                 <div class="row default-according style-1 faq-accordion" id="accordionoc">
                     <div class="col-xl-12 col-lg-12 col-md-12">
                         @if(!empty($tickets))
@@ -398,91 +454,31 @@
 
                     </div>
                 </div>
-
-            </div>
-            <div class="col-sm-12 col-xl-3 col-lg-3 col-md-3 make-me-sticky">
-                <form class="form-horizontal card p-3">
-                    <fieldset>
-
-                        <!-- Form Name -->
-                        <h5 class="m-t-10 text-center">Available Filters</h5>
-
-                        <!-- Text input-->
-                        <div class="form-group row">
-                            <label class="col-lg-12 control-label text-lg-left" for="textinput"></label>
-                            <div class="col-lg-12">
-                                <input id="textinput" name="textinput" type="text" placeholder="Search"
-                                       class="form-control  input-md">
-                            </div>
-                        </div>
-
-                        <!-- Text input-->
-                        <div class="form-group row">
-                            <label class="col-lg-12 control-label text-lg-left" for="textinput">From Date</label>
-                            <div class="col-lg-12">
-                                <input id="textinput" name="textinput" type="text" placeholder="Date"
-                                       class="form-control  input-md">
-                            </div>
-                        </div>
-
-                        <!-- Text input-->
-                        <div class="form-group row">
-                            <label class="col-lg-12 control-label text-lg-left pt-7" for="textinput">To Date</label>
-                            <div class="col-lg-12">
-                                <input id="textinput" name="textinput" type="text" placeholder="Date"
-                                       class="form-control  input-md">
-                            </div>
-                        </div>
-
-                        <!-- Select Basic -->
-                        <div class="form-group row">
-                            <label class="col-lg-12 control-label text-lg-left pt-7" for="selectbasic">Business
-                                Name</label>
-                            <div class="col-lg-12">
-                                <select id="selectbasic" name="selectbasic" class="form-control ">
-                                    <option value="1">Option one</option>
-                                    <option value="2">Option two</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Select Basic -->
-                        <div class="form-group row">
-                            <label class="col-lg-12 control-label text-lg-left pt-7" for="selectbasic">Assigned
-                                To</label>
-                            <div class="col-lg-12">
-                                {!! Form::select('assigned_to', $assignees, null, ['id' => 'assigned_to', 'class' => 'form-control']); !!}
-                            </div>
-                        </div>
-
-                        <!-- Select Basic -->
-                        <div class="form-group row">
-                            <label class="col-lg-12 control-label text-lg-left pt-7" for="selectbasic">Priority</label>
-                            <div class="col-lg-12">
-                                {!! Form::select('priority', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower', 'None' => 'None'), null, ['id' => 'priority', 'class' => 'form-control']); !!}
-                            </div>
-                        </div>
-
-                        <!-- Select Basic -->
-                        <div class="form-group row">
-                            <label class="col-lg-12 control-label text-lg-left pt-7" for="selectbasic">Status</label>
-                            <div class="col-lg-12">
-                                {!! Form::select('status', array('Pending' => 'Pending', 'In Progress' => 'In Progress', 'Dismiss' => 'Dismiss', 'Completed' => 'Completed'), null, ['id' => 'status', 'class' => 'form-control']); !!}
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-lg-12 text-center">
-                                <button type="submit" class="btn btn-pill btn-primary">Filter</button>
-                            </div>
-                        </div>
-
-                    </fieldset>
-                </form>
-
             </div>
         </div>
 
+        <a href="#searchFormModal" class="float" data-whatever="@getbootstrap" data-toggle="modal">
+            <i class="fa fa-filter my-float"></i>
+        </a>
+        <div class="label-container">
+            <div class="label-text">Available Filters</div>
+            <i class="fa fa-play label-arrow"></i>
+        </div>
+
+        <div class="modal fade" id="searchFormModal" tabindex="-1" role="document" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Available Filters</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">×</span></button>
+                    </div>
+                    <div class="modal-body">
+                        @include('supportticket.search_form')
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <!-- Container-fluid Ends-->
     <!--   modal start for add ticket -->
