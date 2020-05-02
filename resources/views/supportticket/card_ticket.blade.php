@@ -2,98 +2,83 @@
     @foreach($tickets as $key => $ticket)
         <div class="card">
             <div class="card-header">
-                <h5 class="mb-0">
-                    <button class="btn btn-link collapsed" data-toggle="collapse"
-                            data-target="#collapseicon-{{ $key }}" aria-expanded="false"
-                            aria-controls="collapseicon">
-                        <i class="fa fa-circle text-danger"></i> {{$ticket->title}}
-                    </button>
-                </h5>
+                <div class="col-sm-12">
+                    <h5 class="mb-0 d-inline-block" style="width: 60%">
+                        <button class="btn btn-link collapsed d-inline-block" data-toggle="collapse"
+                                data-target="#collapseicon-{{ $key }}" aria-expanded="false"
+                                aria-controls="collapseicon">
+                            @if(strtolower($ticket->ticket_type)=='new')
+                                <i class="fa fa-circle text-danger" style="top: 10px"></i> {{$ticket->title}}
+                            @elseif(strtolower($ticket->ticket_type)=='assigned')
+                                <i class="fa fa-circle text-primary" style="top: 10px"></i> {{$ticket->title}}
+                            @elseif(strtolower($ticket->ticket_type)=='open')
+                                <i class="fa fa-circle text-warning" style="top: 10px"></i> {{$ticket->title}}
+                            @else
+                                <i class="fa fa-circle text-success" style="top: 10px"></i> {{$ticket->title}}
+                            @endif
+                        </button>
+                    </h5>
+                    <button type="button" class="btn btn-pill btn-warning pull-right" style="width:auto; margin-right: 40px;">Copy Link</button>
+                </div>
             </div>
             <div class="collapse" id="collapseicon-{{ $key }}" aria-labelledby="collapseicon" data-parent="#accordionoc">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label class="control-label text-lg-left" for="textinput">Detailed Description</label>
-                                <textarea id="desc" name="desc" rows="4" placeholder="" class="form-control">{{$ticket->description}}</textarea>
+                    <form action="{{route('update.ticket',$ticket->id)}}" method="put" class="form-ticket" id="form_{{$ticket->id}}">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label class="control-label text-lg-left" for="textinput">Detailed Description</label>
+                                    <textarea id="desc" name="description" rows="4" placeholder="" class="form-control">{{$ticket->description}}</textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label class="control-label" for="textinput">Priority</label>
-                                {!! Form::select('priority', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower', 'None' => 'None'), $ticket->priority, ['id' => 'priority', 'class' => 'form-control']); !!}
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="textinput">Priority</label>
+                                    {!! Form::select('priority', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower'), $ticket->priority, ['id' => 'priority', 'class' => 'form-control']); !!}
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="textinput">Ticket Type</label>
+                                    {!! Form::select('ticket_type', array('Open' => 'Open', 'Assigned' => 'Assigned', 'New' => 'New','Resolved'=>'Resolved'), $ticket->ticket_type, ['id' => 'priority', 'class' => 'form-control']); !!}
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="textinput">Assigned By</label>
+                                    {!! Form::select('assigned_by', $assignees, $ticket->assigned_to, ['id' => 'assigned_by', 'class' => 'form-control']); !!}
+                                </div>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label class="control-label" for="textinput">Status</label>
-                                {!! Form::select('status', array('New' => 'New', 'Open' => 'Open', 'Assigned' => 'Assigned', 'Resolved' => 'Resolved'), $ticket->status, ['id' => 'status', 'class' => 'form-control']); !!}
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="textinput">Assigned To</label>
+                                    {!! Form::select('assigned_to', $assignees, $ticket->assigned_to, ['id' => 'assigned_to', 'class' => 'form-control']); !!}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label class="control-label" for="textinput">Assigned By</label>
-                                {!! Form::select('assigned_by', $assignees, $ticket->assigned_to, ['id' => 'assigned_by', 'class' => 'form-control']); !!}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label class="control-label" for="textinput">Assigned To</label>
-                                {!! Form::select('assigned_to', $assignees, $ticket->assigned_to, ['id' => 'assigned_to', 'class' => 'form-control']); !!}
-                            </div>
-                        </div>
 
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label class="control-label" for="textinput">Start Date</label>
-                                <input id="textinput" name="textinput" type="date" placeholder="Date" class="form-control" value="{{$ticket->start_date}}">
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="textinput">Start Date</label>
+                                    <input id="textinput" name="start_date" type="date" placeholder="Date" class="form-control" value="{{$ticket->start_date}}">
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="form-group">
+                                    <label class="control-label" for="textinput">Due Date</label>
+                                    <input id="textinput" name="due_date" type="date" placeholder="Date" class="form-control" value="{{$ticket->due_date}}">
+                                </div>
                             </div>
                         </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label class="control-label" for="textinput">Due Date</label>
-                                <input id="textinput" name="textinput" type="date" placeholder="Date" class="form-control" value="{{$ticket->due_date}}">
+                        <div class="row">
+                            <div class="col-12">
+                                <button type="button" class="btn btn-pill btn-success pull-right" id="button_submit_from_{{$ticket->id}}" data-btn-text="Save and Update" onclick="submitForm('{{$ticket->id}}')" style="width:auto;">Save and Update</button>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label class="control-label" for="textinput">Tier</label>
-                                <select id="selectbasic" name="selectbasic" class="form-control ">
-                                    <option value="1">Option one</option>
-                                    <option value="2">Option two</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="form-group">
-                                <label class="control-label" for="textinput">Ticket Type</label>
-                                <select id="ticket_type" name="ticket_type" class="form-control ">
-                                    <option value="Open"
-                                            @if($ticket->ticket_type === 'Open') selected @endif>
-                                        Open
-                                    </option>
-                                    <option value="Assigned"
-                                            @if($ticket->ticket_type === 'Assigned') selected @endif>
-                                        Assigned
-                                    </option>
-                                    <option value="New"
-                                            @if($ticket->ticket_type === 'New') selected @endif>New
-                                    </option>
-                                    <option value="Resolved"
-                                            @if($ticket->ticket_type === 'Resolved') selected @endif>
-                                        Resolved
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                     {{-- tab change log--}}
                     <div class="row default-according style-1 faq-accordion" id="accordionoc-sub-{{ $key }}">
                         <div class="row" style="width: 100%;">
@@ -113,19 +98,52 @@
                                     <div class="collapse" id="changelog-{{ $key }}"
                                          aria-labelledby="collapseicon"
                                          data-parent="#accordionoc-sub-{{ $key }}">
-                                        <div class="card-body">
-                                            <table class="table table-bordered table-hover table-striped">
-                                                <tbody>
-                                                <tr>
-                                                    <td>Feb 21, 2020</td>
-                                                    <td>Due date changed to Mar 21, 2020</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Feb 21, 2020</td>
-                                                    <td>Due date changed to Mar 21, 2020</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
+                                        <div class="card-body" id="child_change_log_{{$ticket->id}}">
+                                            @foreach($ticket->logs as $log)
+                                                <div class="row default-according style-1 faq-accordion" id="toogle_log{{ $log->id }}" style="margin-top: -20px">
+                                                    <div class="row" style="width: 100%;">
+                                                        <div class="col-lg-12">
+                                                            <div class="card">
+                                                                <div class="card-header">
+                                                                    <h5 class="mb-0">
+                                                                        <button class="btn btn-link collapsed"
+                                                                                data-toggle="collapse"
+                                                                                data-target="#toogle_log-{{ $log->id }}"
+                                                                                aria-expanded="false"
+                                                                                aria-controls="collapseicon">
+                                                                            {{$log->user->name}}, {{ $log->updated_at }}
+                                                                        </button>
+                                                                    </h5>
+                                                                </div>
+                                                                <div class="collapse" id="toogle_log-{{ $log->id }}"
+                                                                     aria-labelledby="collapseicon"
+                                                                     data-parent="#toogle_logb-{{ $log->id }}">
+                                                                    <div class="card-body">
+                                                                        <table class="table table-striped">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Label</th>
+                                                                                    <th>From</th>
+                                                                                    <th>To</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                                @foreach(json_decode($log->data) as $key_change=>$data)
+                                                                                    <tr>
+                                                                                        <td>{{ $key_change }}</td>
+                                                                                        <td>{{ $data->from  }}</td>
+                                                                                        <td> {{ $data->to  }}</td>
+                                                                                    </tr>
+                                                                                @endforeach
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>
@@ -136,10 +154,9 @@
                     <div class="row default-according style-1 faq-accordion" id="accordionoc-tasks-{{ $key }}" style="margin-top: -20px">
                         <div class="row" style="width: 100%;">
                             <div class="col-lg-12">
-
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="mb-0">
+                                        <h5 class="mb-0 d-inline-block" style="width: 60%">
                                             <button class="btn btn-link collapsed"
                                                     data-toggle="collapse"
                                                     data-target="#assigned-tasks-{{ $key }}"
@@ -148,6 +165,7 @@
                                                 Assigned Tasks
                                             </button>
                                         </h5>
+                                        <button type="button" class="btn btn-pill btn-warning pull-right" style="width:auto; margin-right: 40px;">Add Task</button>
                                     </div>
                                     <div class="collapse" id="assigned-tasks-{{ $key }}"
                                          aria-labelledby="collapseicon"
@@ -193,7 +211,7 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="mb-0">
+                                        <h5 class="mb-0 d-inline-block" style="width: 60%">
                                             <button class="btn btn-link collapsed"
                                                     data-toggle="collapse"
                                                     data-target="#assigned-attachment-{{ $key }}"
@@ -202,6 +220,7 @@
                                                 Attachments
                                             </button>
                                         </h5>
+                                        <button type="button" class="btn btn-pill btn-warning pull-right" style="width:auto; margin-right: 40px;">Add Attachment</button>
                                     </div>
                                     <div class="collapse" id="assigned-attachment-{{ $key }}"
                                          aria-labelledby="collapseicon"
@@ -316,25 +335,6 @@
                         </div>
                     </div>
                     <!-- comments end -->
-
-                    <!-- buttons start -->
-                    <div class="form-group row">
-                        <div class="col-lg-12 text-right mt-5">
-                            <button type="button" class="btn btn-pill btn-primary"
-                                    style="width:auto;">Add Task
-                            </button>
-                            <button type="button" class="btn btn-pill btn-warning"
-                                    style="width:auto;">Add Attachment
-                            </button>
-                            <button type="button" class="btn btn-pill btn-primary"
-                                    style="width:auto;">Copy Link
-                            </button>
-                            <button type="button" class="btn btn-pill btn-success"
-                                    style="width:auto;">Save and Update
-                            </button>
-                        </div>
-                    </div>
-                    <!-- buttons end -->
                 </div>
             </div>
         </div>

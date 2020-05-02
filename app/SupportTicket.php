@@ -12,12 +12,21 @@ class SupportTicket extends Model
 		'description',
 		'ticket_type',
 		'start_date',
+        'due_date',
 		'status',
 		'priority',
 		'parent_task_id',
         'ticket_number',
-        'user_id'
+        'user_id',
+        'assigned_to'
 	];
+
+    protected $with =[
+        'ticket_attachments',
+        'ticket_comments',
+        'user',
+        'logs'
+    ];
 
 	public function ticket_attachments()
 	{
@@ -31,6 +40,11 @@ class SupportTicket extends Model
 
 	public function user(){
 	    return $this->belongsTo(User::class,'user_id','id');
+    }
+
+    public function logs()
+    {
+        return $this->hasMany(TicketLog::class,'ticket_id','id');
     }
 
     protected static function boot()

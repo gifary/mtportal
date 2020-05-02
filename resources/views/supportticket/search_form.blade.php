@@ -53,7 +53,7 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label class="control-label text-lg-left pt-7" for="selectbasic">Priority</label>
-                        {!! Form::select('priority[]', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower','None'=>'None'), null, ['id' => 'priority', 'class' => 'form-control js-example-basic-single','multiple'=>'multiple']); !!}
+                        {!! Form::select('priority[]', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower'), null, ['id' => 'priority', 'class' => 'form-control js-example-basic-single','multiple'=>'multiple']); !!}
                     </div>
                 </div>
                 <div class="col-6">

@@ -331,6 +331,35 @@
             });
         });
 
+        function submitForm(id) {
+            var form = $("#form_"+id);
+            var url = form.attr('action');
+
+            var btn =$("#button_submit_from_"+id);
+            $(btn).buttonLoader('start');
+
+            $.ajax({
+                type: "PUT",
+                url: url,
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                },
+                dataType:'html',
+                data: form.serialize(), // serializes the form's elements.
+                success: function(data)
+                {
+                    $.notify('Success update', {
+                        type: 'success',
+                        allow_dismiss: true,
+                        delay: 100,
+                        timer: 300
+                    })
+                    $(btn).buttonLoader('stop');
+                    $("#child_change_log_"+id).append(data)
+                }
+            });
+        }
+
         function editComment(id,comment)
         {
             // show modal

@@ -12,8 +12,8 @@ use App\TicketAttachment;
 use App\TicketComment;
 use App\TaskComment;
 use App\AttachmentComment;
+use App\TicketLog;
 use App\User;
-use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,6 +35,16 @@ class SupportTicketController extends Controller
         $open = SupportTicket::where( 'ticket_type', 'Open' );
         $resolved = SupportTicket::where( 'ticket_type', 'Resolved' );
         $tickets = SupportTicket::with( [ 'ticket_attachments', 'ticket_comments' ] );
+
+        //validate if login user is client
+        if (strtolower(Auth::user()->role_user->name)=='client')
+        {
+            $new = $new->where('user_id',Auth::user()->id);
+            $assigned = $assigned->where('user_id',Auth::user()->id);
+            $open = $open->where('user_id',Auth::user()->id);
+            $resolved = $resolved->where('user_id',Auth::user()->id);
+            $tickets = $tickets->where('user_id',Auth::user()->id);
+        }
 
         if($request->has('search') && strlen($request->search)>1)
         {
@@ -157,12 +167,11 @@ class SupportTicketController extends Controller
 
         $tickets                   = $tickets
                 ->orderBy( 'id', 'desc' )
-                ->take(2)->get();
+                ->take(1)->get();
 
-        $assignees =
-            User::where( 'email', '!=', Auth::user()->email )->pluck( 'email' )
-                ->toArray();
-        $assignees = array_combine( $assignees, $assignees );
+        //dd(json_decode($tickets[0]->logs()->first()->data));
+
+        $assignees = User::where( 'email', '!=', Auth::user()->email )->pluck( 'email','id' );
 
         return view( 'supportticket.index',compact('ticket_counts','tickets','assignees') );
     }
@@ -170,6 +179,11 @@ class SupportTicketController extends Controller
     public function searchTicket(Request $request)
     {
         $tickets = SupportTicket::with( [ 'ticket_attachments', 'ticket_comments' ] );
+
+        if (strtolower(Auth::user()->role_user->name)=='client')
+        {
+            $tickets = $tickets->where('user_id',Auth::user()->id);
+        }
 
         if($request->has('search') && strlen($request->search)>1)
         {
@@ -184,10 +198,7 @@ class SupportTicketController extends Controller
             ->orderBy( 'id', 'desc' )
             ->get();
 
-        $assignees =
-            User::where( 'email', '!=', Auth::user()->email )->pluck( 'email' )
-                ->toArray();
-        $assignees = array_combine( $assignees, $assignees );
+        $assignees = User::where( 'email', '!=', Auth::user()->email )->pluck( 'email','id' );
 
         return view( 'supportticket.card_ticket',compact('tickets','assignees') );
     }
@@ -223,7 +234,7 @@ class SupportTicketController extends Controller
             $ticket_attachment->ticket_id        = $support_ticket->id;
             $ticket_attachment->attachment_title = $real_name;
             $ticket_attachment->attachment       =
-                env( 'app_url' ) . "/public/storage/images/" . $filename;
+                env( 'app_url' ) . "/storage/images/" . $filename;
             $ticket_attachment->save();
 
             // notif to user
@@ -408,16 +419,61 @@ class SupportTicketController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, $id)
     {
-        //
+        try{
+            DB::beginTransaction();
+            $ticket = SupportTicket::find($id);
+            $log=null;
+            if(!empty($ticket))
+            {
+                $data_ticket_log['ticket_id']= $ticket->id;
+                $data_ticket_log['user_id']= Auth::user()->id;
+                $changes_data = [];
+                if($request->description!=$ticket->description){
+
+                    $changes_data['description']=['from'=>$ticket->description,'to'=>$request->descriptio];
+                }
+
+                if($request->ticket_type!=$ticket->ticket_type){
+                    $changes_data['ticket type']=['from'=>$ticket->ticket_type,'to'=>$request->ticket_type];
+                }
+
+                if($request->start_date!=$ticket->start_date){
+                    $changes_data['start date']=['from'=>$ticket->start_date,'to'=>$request->start_date];
+                }
+
+                if($request->due_date!=$ticket->due_date){
+                    $changes_data['due date']=['from'=>$ticket->due_date,'to'=>$request->due_date];
+                }
+
+                if($request->priority!=$ticket->priority){
+                    $changes_data['priority']=['from'=>$ticket->priority,'to'=>$request->priority];
+                }
+
+                if($request->assigned_to!=$ticket->assigned_to){
+                    $user_from = User::find($ticket->assigned_to);
+                    $user_to= User::find($request->assigned_to);
+
+                    $changes_data['assigned to']=['from'=>$user_from->email,'to'=>$user_to->email];
+                }
+
+                if(count($changes_data)>0)
+                {
+                    $data_ticket_log['data']=json_encode($changes_data);
+
+                    $log = TicketLog::create($data_ticket_log);
+                }
+            }
+
+            $ticket->update($request->all());
+            DB::commit();
+
+            return view( 'supportticket.add_changelog',compact('log') );
+        }catch (Exception  $e){
+            DB::rollBack();
+        }
     }
 
     /**
