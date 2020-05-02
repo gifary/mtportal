@@ -169,7 +169,7 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="mb-0 d-inline-block" style="width: 60%">
+                                        <h5 class="mb-0 d-inline-block" style="width: 70%">
                                             <button class="btn btn-link collapsed"
                                                     data-toggle="collapse"
                                                     data-target="#assigned-tasks-{{ $key }}"
@@ -178,7 +178,7 @@
                                                 Assigned Tasks
                                             </button>
                                         </h5>
-                                        <button type="button" class="btn btn-pill btn-primary pull-right" style="width:auto; margin-right: 40px;" onclick="addTask('{{$ticket->id}}')">Add Task</button>
+                                        <button type="button" class="btn btn-pill btn-primary pull-right" style="width:auto; margin-right: 40px;" onclick="addTask('{{$ticket->id}}')">Add</button>
                                     </div>
                                     <div class="collapse" id="assigned-tasks-{{ $key }}"
                                          aria-labelledby="collapseicon"
@@ -221,7 +221,7 @@
                             <div class="col-lg-12">
                                 <div class="card">
                                     <div class="card-header">
-                                        <h5 class="mb-0 d-inline-block" style="width: 60%">
+                                        <h5 class="mb-0 d-inline-block" style="width: 70%">
                                             <button class="btn btn-link collapsed"
                                                     data-toggle="collapse"
                                                     data-target="#assigned-attachment-{{ $key }}"
@@ -230,7 +230,7 @@
                                                 Attachments
                                             </button>
                                         </h5>
-                                        <button type="button" class="btn btn-pill btn-warning pull-right" style="width:auto; margin-right: 40px;">Add Attachment</button>
+                                        <button type="button" class="btn btn-pill btn-primary pull-right" style="width:auto; margin-right: 40px;" onclick="addAttachment('{{$ticket->id}}')">Add</button>
                                     </div>
                                     <div class="collapse" id="assigned-attachment-{{ $key }}"
                                          aria-labelledby="collapseicon"

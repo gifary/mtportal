@@ -399,6 +399,39 @@
         </div>
     </div>
     {{--    end modal add task--}}
+
+    {{-- start modal attachment --}}
+    <div class="modal fade" id="addAttachment" tabindex="-1" role="document" aria-labelledby="addBusinessModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="business">Add Attachment</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+
+                <input type="hidden" name="ticket_id" id="ticket_id_of_attachment">
+                <div class="modal-body ">
+                    <!-- Container-fluid starts-->
+                    <!-- Container-fluid Ends-->
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="deal_size">Attachment</label>
+                            <input class="form-control" id="attachment_attachment" name="attachment"
+                                   type="file"
+                                   accept="image/x-png,image/jpeg, .pdf, .docx, .jpeg, .png, .svg, .psd, .ai, .eps">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-pill btn-primary" type="button" id="submit_attachment">Add Attachment</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    {{-- end modal attachment --}}
 @endsection
 @section('script')
     <script>
@@ -444,6 +477,11 @@
         function addTask(id) {
             $("#ticket_id_of_task").val(id)
             $("#addTask").modal('show');
+        }
+
+        function addAttachment(id) {
+            $("#ticket_id_of_attachment").val(id)
+            $("#addAttachment").modal('show');
         }
 
         function deleteAttachment(id) {
@@ -527,6 +565,29 @@
             });
         }
 
+        $("#submit_attachment").on('click',function () {
+            var btn =$("#submit_attachment");
+            $(btn).buttonLoader('start');
+
+            var files = $('#attachment_attachment')[0].files[0];
+            fd.append('file',files);
+            fd.append('ticket_id',$("#ticket_id_of_attachment").val());
+
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                type:"post",
+                url: "{!! route('admin.list_ppid.verify') !!}",
+                data: fd,
+                contentType: false,
+                processData: false
+            }).done (function(data, textStatus, jqXHR){
+                $(btn).buttonLoader('stop');
+            }).fail (function(jqXHR, textStatus, errorThrown){
+                $(btn).buttonLoader('stop');
+            });
+        });
 
         $("#edit_comment").on('click',function () {
             // update comment
