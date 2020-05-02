@@ -233,8 +233,7 @@ class SupportTicketController extends Controller
             $ticket_attachment                   = new TicketAttachment();
             $ticket_attachment->ticket_id        = $support_ticket->id;
             $ticket_attachment->attachment_title = $real_name;
-            $ticket_attachment->attachment       =
-                env( 'app_url' ) . "/storage/images/" . $filename;
+            $ticket_attachment->attachment       =  "/storage/images/" . $filename;
             $ticket_attachment->save();
 
             // notif to user
@@ -459,6 +458,13 @@ class SupportTicketController extends Controller
                     $changes_data['assigned to']=['from'=>$user_from->email,'to'=>$user_to->email];
                 }
 
+                if($request->assigned_by!=$ticket->assigned_by){
+                    $user_from = User::find($ticket->assigned_by);
+                    $user_to= User::find($request->assigned_by);
+
+                    $changes_data['assigned by']=['from'=>$user_from->email,'to'=>$user_to->email];
+                }
+
                 if(count($changes_data)>0)
                 {
                     $data_ticket_log['data']=json_encode($changes_data);
@@ -527,5 +533,15 @@ class SupportTicketController extends Controller
         }
 
         return response()->json($formatted_tags);
+    }
+
+    public function deleteAttachment($id)
+    {
+        $ticket_attachment = TicketAttachment::find($id);
+        @unlink(public_path() . $ticket_attachment->attachment);
+
+        $ticket_attachment->delete();
+
+        return response()->json(['message'=>'success']);
     }
 }

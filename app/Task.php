@@ -10,4 +10,9 @@ class Task extends Model
         'title', 'description', 'status', 'start_date', 'task_type','user_id',
         'due_date', 'priority','assigned_to','parent_task_id'
     ];
+
+    public function assignedto()
+    {
+        return $this->belongsTo(User::class,'assigned_to','id');
+    }
 }

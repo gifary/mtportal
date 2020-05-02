@@ -18,7 +18,8 @@ class SupportTicket extends Model
 		'parent_task_id',
         'ticket_number',
         'user_id',
-        'assigned_to'
+        'assigned_to',
+        'assigned_by'
 	];
 
     protected $with =[
@@ -47,6 +48,11 @@ class SupportTicket extends Model
         return $this->hasMany(TicketLog::class,'ticket_id','id');
     }
 
+    public function tasks()
+    {
+        return $this->hasMany(Task::class,'ticket_id','id');
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -56,5 +62,6 @@ class SupportTicket extends Model
             $model->user_id = Auth::user()->id;
         });
     }
+
 
 }

@@ -2,24 +2,37 @@
     @foreach($tickets as $key => $ticket)
         <div class="card">
             <div class="card-header">
-                <div class="col-sm-12">
-                    <h5 class="mb-0 d-inline-block" style="width: 60%">
-                        <button class="btn btn-link collapsed d-inline-block" data-toggle="collapse"
-                                data-target="#collapseicon-{{ $key }}" aria-expanded="false"
-                                aria-controls="collapseicon">
-                            @if(strtolower($ticket->ticket_type)=='new')
-                                <i class="fa fa-circle text-danger" style="top: 10px"></i> {{$ticket->title}}
-                            @elseif(strtolower($ticket->ticket_type)=='assigned')
-                                <i class="fa fa-circle text-primary" style="top: 10px"></i> {{$ticket->title}}
-                            @elseif(strtolower($ticket->ticket_type)=='open')
-                                <i class="fa fa-circle text-warning" style="top: 10px"></i> {{$ticket->title}}
-                            @else
-                                <i class="fa fa-circle text-success" style="top: 10px"></i> {{$ticket->title}}
-                            @endif
-                        </button>
-                    </h5>
-                    <button type="button" class="btn btn-pill btn-warning pull-right" style="width:auto; margin-right: 40px;">Copy Link</button>
-                </div>
+                <h5 class="mb-0">
+                    <button style="white-space: normal;" class="btn btn-link collapsed d-inline-block" data-toggle="collapse"
+                            data-target="#collapseicon-{{ $key }}" aria-expanded="false"
+                            aria-controls="collapseicon">
+
+                        @if(strtolower($ticket->ticket_type)=='new')
+                            <i class="fa fa-circle text-danger"></i>
+                        @elseif(strtolower($ticket->ticket_type)=='assigned')
+                            <i class="fa fa-circle text-primary"></i>
+                        @elseif(strtolower($ticket->ticket_type)=='open')
+                            <i class="fa fa-circle text-warning"></i>
+                        @else
+                            <i class="fa fa-circle text-success"></i>
+                        @endif
+
+                        <div class="row task-acc-full-details">
+                            <div class="col-md-7 task-title-res">
+                                <span>{{$ticket->ticket_number}} {{$ticket->title}}</span>
+                            </div>
+                            <div class="col-md-4 task-acc-right">
+                                <div class="res-thumblins task-acc-details">
+                                    <p>{{$ticket->user->business!=null ? $ticket->user->business->cname : ''}}</p>
+                                    <p>{{ \Carbon\Carbon::parse($ticket->created_at)->format('d M, Y')  }}</p>
+                                    <img class="attachedTo_logo" style="float: left;width: 30px;height: 30px;border-radius: 25px;border: .5px solid #51ea86;margin-top: -5px;"
+                                         src=" @if ($ticket->user->profile_pic !=Null){{asset($ticket->user->profile_pic)}} @else {{asset('/')}}assets/images/other-images/receiver-img.jpg @endif" />
+
+                                </div>
+                            </div>
+                        </div>
+                    </button>
+                </h5>
             </div>
             <div class="collapse" id="collapseicon-{{ $key }}" aria-labelledby="collapseicon" data-parent="#accordionoc">
                 <div class="card-body">
@@ -165,7 +178,7 @@
                                                 Assigned Tasks
                                             </button>
                                         </h5>
-                                        <button type="button" class="btn btn-pill btn-warning pull-right" style="width:auto; margin-right: 40px;">Add Task</button>
+                                        <button type="button" class="btn btn-pill btn-primary pull-right" style="width:auto; margin-right: 40px;" onclick="addTask('{{$ticket->id}}')">Add Task</button>
                                     </div>
                                     <div class="collapse" id="assigned-tasks-{{ $key }}"
                                          aria-labelledby="collapseicon"
@@ -182,20 +195,17 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr>
-                                                    <td>Feb 21, 2020</td>
-                                                    <td>Change the Website Header</td>
-                                                    <td>Rishav Das</td>
-                                                    <td>Feb 21, 2020</td>
-                                                    <td>View/Edit/Delete</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Feb 21, 2020</td>
-                                                    <td>Change the Website Header</td>
-                                                    <td>Rishav Das</td>
-                                                    <td>Feb 21, 2020</td>
-                                                    <td>View/Edit/Delete</td>
-                                                </tr>
+                                                @foreach($ticket->tasks as $task)
+                                                    <tr>
+                                                        <td>{{ \Carbon\Carbon::parse($task->created_at)->format('d M, Y')  }}</td>
+                                                        <td>{{$task->title}}</td>
+                                                        <td>{{$task->assignedto->name}}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d M, Y')  }}</td>
+                                                        <td>
+
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -229,13 +239,13 @@
                                             <table class="table table-bordered table-hover table-striped">
                                                 <tbody>
                                                 @foreach($ticket->ticket_attachments as $val)
-                                                    <tr>
+                                                    <tr id="attachment_row_{{$val->id}}">
                                                         <td>{{ \Illuminate\Support\Carbon::parse($val->created_at)->format('M d, Y') }}</td>
                                                         <td>{{ $val->attachment_title }}</td>
                                                         <td>
-                                                            <a href="{{ ($val->attachment) }}" target="_blank"><b>Download
-                                                                    Link</b></a></td>
-                                                        <td>View Comments</td>
+                                                            <a href="{{ ($val->attachment) }}" target="_blank"><i class="icofont icofont-download-alt"></i></a>
+                                                            <i class="icofont icofont-trash text-primary" onclick="deleteAttachment('{{$val->id}}')"></i>
+                                                        </td>
                                                     </tr>
                                                 @endforeach
                                                 </tbody>

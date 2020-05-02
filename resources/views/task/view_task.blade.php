@@ -1,8 +1,6 @@
 @extends('layouts.master')
 @section('title', 'View Task | Martechportal')
 @section('style')
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{asset('assets/css/select2.css')}}">
     <style>
         .select2-container {
             width: 100% !important;

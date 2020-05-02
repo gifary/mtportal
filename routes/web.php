@@ -74,6 +74,7 @@ Route::post('/taskcommentAdd', 'SupportTicketController@taskcommentAdd')->name('
 Route::post('/taskattachmentcommentAdd', 'SupportTicketController@taskattachmentcommentAdd')->name('taskattachmentcommentAdd');
 Route::get('/searchTicket', 'SupportTicketController@searchTicket')->name('searchTicket');
 Route::put('/supportticket/{id}', 'SupportTicketController@update')->name('update.ticket');
+Route::delete('/supportticket/{id}/deleteAttachment', 'SupportTicketController@deleteAttachment')->name('deleteAttachment');
 
 Route::get('/create', 'SupportTicketController@create')->name('add_ticket_page');
 
