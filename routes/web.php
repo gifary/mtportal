@@ -68,8 +68,11 @@ Route::get('/supportticket','SupportTicketController@index')->name('supportticke
 
 Route::get('/create', 'SupportTicketController@create')->name('add_ticket_page');
 Route::post('/commentAdd', 'SupportTicketController@commentAdd')->name('commentAdd');
+Route::post('/commentEdit', 'SupportTicketController@commentEdit')->name('commentEdit');
+Route::post('/commentDelete', 'SupportTicketController@commentDelete')->name('commentDelete');
 Route::post('/taskcommentAdd', 'SupportTicketController@taskcommentAdd')->name('taskcommentAdd');
 Route::post('/taskattachmentcommentAdd', 'SupportTicketController@taskattachmentcommentAdd')->name('taskattachmentcommentAdd');
+Route::get('/searchTicket', 'SupportTicketController@searchTicket')->name('searchTicket');
 
 Route::get('/create', 'SupportTicketController@create')->name('add_ticket_page');
 

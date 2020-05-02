@@ -3,24 +3,16 @@
         <fieldset>
             <!-- Text input-->
             <div class="row">
-                <div class="col-12">
-                    <div class="form-group">
-                        <label class="control-label text-lg-left" for="textinput">Search Title or Ticket Number</label>
-                        <input  name="search" type="text" placeholder="Search" class="form-control  input-md">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="col-6">
                     <div class="form-group">
                         <label class="control-label text-lg-left" for="textinput">From Date</label>
-                        <input  name="start_date" type="text" placeholder="Date" class="form-control  input-md">
+                        <input  name="start_date" type="date" placeholder="Date" class="form-control  input-md">
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
                         <label class="control-label text-lg-left pt-7" for="textinput">To Date</label>
-                        <input  name="end_date" type="text" placeholder="Date" class="form-control  input-md">
+                        <input  name="end_date" type="date" placeholder="Date" class="form-control  input-md">
                     </div>
                 </div>
             </div>
@@ -28,13 +20,13 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label class="control-label text-lg-left" for="textinput">Created Date</label>
-                        <input  name="created_date" type="text" placeholder="Date" class="form-control  input-md">
+                        <input  name="created_date" type="date" placeholder="Date" class="form-control  input-md">
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
                         <label class="control-label text-lg-left pt-7" for="textinput">Due Date</label>
-                        <input  name="due_date" type="text" placeholder="Date" class="form-control  input-md">
+                        <input  name="due_date" type="date" placeholder="Date" class="form-control  input-md">
                     </div>
                 </div>
             </div>
@@ -43,7 +35,7 @@
                 <div class="col-12">
                     <div class="form-group">
                         <label class="control-label text-lg-left pt-7" for="selectbasic">Business Name</label>
-                        <select id="business" name="assigment[]" class="form-control" multiple></select>
+                        <select id="business" name="business[]" class="form-control" multiple></select>
                     </div>
                 </div>
             </div>
@@ -61,13 +53,13 @@
                 <div class="col-6">
                     <div class="form-group">
                         <label class="control-label text-lg-left pt-7" for="selectbasic">Priority</label>
-                        {!! Form::select('priority', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower', 'None' => 'None'), null, ['id' => 'priority', 'class' => 'form-control js-example-basic-single','multiple'=>'multiple']); !!}
+                        {!! Form::select('priority[]', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower','None'=>'None'), null, ['id' => 'priority', 'class' => 'form-control js-example-basic-single','multiple'=>'multiple']); !!}
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="form-group">
                         <label class="control-label text-lg-left pt-7" for="selectbasic">Status</label>
-                        {!! Form::select('status', array('Pending' => 'Pending', 'In Progress' => 'In Progress', 'Dismiss' => 'Dismiss', 'Completed' => 'Completed'), null, ['id' => 'status', 'class' => 'form-control js-example-basic-single','multiple'=>'multiple']); !!}
+                        {!! Form::select('status[]', array('New' => 'New', 'Open' => 'Open', 'Assigned' => 'Assigned', 'Resolved' => 'Resolved'), null, ['id' => 'status', 'class' => 'form-control js-example-basic-single','multiple'=>'multiple']); !!}
                     </div>
                 </div>
             </div>

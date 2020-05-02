@@ -2,20 +2,22 @@
 
 namespace App\Notifications;
 
-use App\SupportTicket;
+use App\TicketComment;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CreateTask extends Notification
+class AddComment extends Notification
 {
     use Queueable;
 
-    private $supportTicket;
+    private $ticketComment;
+    private $ticketNumber;
 
-    public function __construct(SupportTicket $supportTicket)
+    public function __construct(TicketComment $ticketComment,$ticketNumber)
     {
-        $this->supportTicket = $supportTicket;
+        $this->ticketComment = $ticketComment;
+        $this->ticketNumber =$ticketNumber;
     }
 
     /**
@@ -26,26 +28,20 @@ class CreateTask extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','mail'];
+        return ['mail','database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
     public function toMail($notifiable)
     {
         return (new MailMessage)
-                    ->line('Thank You for posting in. We will get back to you shortly. Your ticket number is '.$this->supportTicket->ticket_number.'.');
+            ->line("You have a new comment for Ticket ".$this->ticketNumber."]!");
     }
 
 
     public function toDatabase($notifiable)
     {
         return [
-            'data'=> "Ticket ".$this->supportTicket->ticket_number." created successfully!"
+            'data'=> "You have a new comment for Ticket ".$this->ticketNumber."!"
         ];
     }
 

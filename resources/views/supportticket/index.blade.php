@@ -165,403 +165,19 @@
                     </div>
                 </div>
                 <div class="row default-according style-1 faq-accordion" id="accordionoc">
-                    <div class="col-xl-12 col-lg-12 col-md-12">
-                        @if(!empty($tickets))
-                            @foreach($tickets as $key => $ticket)
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link collapsed" data-toggle="collapse"
-                                                    data-target="#collapseicon-{{ $key }}" aria-expanded="false"
-                                                    aria-controls="collapseicon">
-                                                <i class="fa fa-circle text-danger"></i> {{$ticket->title}}
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div class="collapse" id="collapseicon-{{ $key }}" aria-labelledby="collapseicon" data-parent="#accordionoc">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <label class="control-label text-lg-left" for="textinput">Detailed Description</label>
-                                                        <textarea id="desc" name="desc" rows="4" placeholder="" class="form-control">{{$ticket->description}}</textarea>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="textinput">Priority</label>
-                                                        {!! Form::select('priority', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower', 'None' => 'None'), $ticket->priority, ['id' => 'priority', 'class' => 'form-control']); !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="textinput">Status</label>
-                                                        {!! Form::select('status', array('Pending' => 'Pending', 'In Progress' => 'In Progress', 'Dismiss' => 'Dismiss', 'Completed' => 'Completed'), $ticket->status, ['id' => 'status', 'class' => 'form-control']); !!}
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="textinput">Assigned By</label>
-                                                        {!! Form::select('assigned_by', $assignees, $ticket->assigned_to, ['id' => 'assigned_by', 'class' => 'form-control']); !!}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="textinput">Assigned To</label>
-                                                        {!! Form::select('assigned_to', $assignees, $ticket->assigned_to, ['id' => 'assigned_to', 'class' => 'form-control']); !!}
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="textinput">Start Date</label>
-                                                        <input id="textinput" name="textinput" type="date" placeholder="Date" class="form-control" value="{{$ticket->start_date}}">
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="textinput">Due Date</label>
-                                                        <input id="textinput" name="textinput" type="date" placeholder="Date" class="form-control" value="{{$ticket->due_date}}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="textinput">Tier</label>
-                                                        <select id="selectbasic" name="selectbasic" class="form-control ">
-                                                            <option value="1">Option one</option>
-                                                            <option value="2">Option two</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="col-4">
-                                                    <div class="form-group">
-                                                        <label class="control-label" for="textinput">Ticket Type</label>
-                                                        <select id="ticket_type" name="ticket_type" class="form-control ">
-                                                            <option value="Open"
-                                                                    @if($ticket->ticket_type === 'Open') selected @endif>
-                                                                Open
-                                                            </option>
-                                                            <option value="Assigned"
-                                                                    @if($ticket->ticket_type === 'Assigned') selected @endif>
-                                                                Assigned
-                                                            </option>
-                                                            <option value="New"
-                                                                    @if($ticket->ticket_type === 'New') selected @endif>New
-                                                            </option>
-                                                            <option value="Resolved"
-                                                                    @if($ticket->ticket_type === 'Resolved') selected @endif>
-                                                                Resolved
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- tab change log--}}
-                                            <div class="row default-according style-1 faq-accordion" id="accordionoc-sub-{{ $key }}">
-                                                <div class="row" style="width: 100%;">
-                                                    <div class="col-lg-12">
-                                                        <div class="card">
-                                                            <div class="card-header">
-                                                                <h5 class="mb-0">
-                                                                    <button class="btn btn-link collapsed"
-                                                                            data-toggle="collapse"
-                                                                            data-target="#changelog-{{ $key }}"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="collapseicon">
-                                                                        Change Log
-                                                                    </button>
-                                                                </h5>
-                                                            </div>
-                                                            <div class="collapse" id="changelog-{{ $key }}"
-                                                                 aria-labelledby="collapseicon"
-                                                                 data-parent="#accordionoc-sub-{{ $key }}">
-                                                                <div class="card-body">
-                                                                    <table class="table table-bordered table-hover table-striped">
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td>Feb 21, 2020</td>
-                                                                            <td>Due date changed to Mar 21, 2020</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Feb 21, 2020</td>
-                                                                            <td>Due date changed to Mar 21, 2020</td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- tab assigned tasks --}}
-                                            <div class="row default-according style-1 faq-accordion" id="accordionoc-tasks-{{ $key }}">
-                                                <div class="row" style="width: 100%;">
-                                                    <div class="col-lg-12">
-
-                                                        <div class="card">
-                                                            <div class="card-header">
-                                                                <h5 class="mb-0">
-                                                                    <button class="btn btn-link collapsed"
-                                                                            data-toggle="collapse"
-                                                                            data-target="#assigned-tasks-{{ $key }}"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="collapseicon">
-                                                                        Assigned Tasks
-                                                                    </button>
-                                                                </h5>
-                                                            </div>
-                                                            <div class="collapse" id="assigned-tasks-{{ $key }}"
-                                                                 aria-labelledby="collapseicon"
-                                                                 data-parent="#accordionoc-tasks-{{ $key }}">
-                                                                <div class="card-body">
-                                                                    <table class="table table-bordered table-hover table-striped">
-                                                                        <thead>
-                                                                        <tr>
-                                                                            <th>Assigned Date</th>
-                                                                            <th>Task Title</th>
-                                                                            <th>Assigned To</th>
-                                                                            <th>Due Date</th>
-                                                                            <th>Actions</th>
-                                                                        </tr>
-                                                                        </thead>
-                                                                        <tbody>
-                                                                        <tr>
-                                                                            <td>Feb 21, 2020</td>
-                                                                            <td>Change the Website Header</td>
-                                                                            <td>Rishav Das</td>
-                                                                            <td>Feb 21, 2020</td>
-                                                                            <td>View/Edit/Delete</td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>Feb 21, 2020</td>
-                                                                            <td>Change the Website Header</td>
-                                                                            <td>Rishav Das</td>
-                                                                            <td>Feb 21, 2020</td>
-                                                                            <td>View/Edit/Delete</td>
-                                                                        </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{-- tab attachment --}}
-                                            <div class="row default-according style-1 faq-accordion" id="accordionoc-attachment-{{ $key }}">
-                                                <div class="row" style="width: 100%;">
-                                                    <div class="col-lg-12">
-                                                        <div class="card">
-                                                            <div class="card-header">
-                                                                <h5 class="mb-0">
-                                                                    <button class="btn btn-link collapsed"
-                                                                            data-toggle="collapse"
-                                                                            data-target="#assigned-attachment-{{ $key }}"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="collapseicon">
-                                                                        Attachments
-                                                                    </button>
-                                                                </h5>
-                                                            </div>
-                                                            <div class="collapse" id="assigned-attachment-{{ $key }}"
-                                                                 aria-labelledby="collapseicon"
-                                                                 data-parent="#accordionoc-attachment-{{ $key }}">
-                                                                <div class="card-body">
-                                                                    <table class="table table-bordered table-hover table-striped">
-                                                                        <tbody>
-                                                                        @foreach($ticket->ticket_attachments as $key=>$val)
-                                                                            <tr>
-                                                                                <td>{{ \Illuminate\Support\Carbon::parse($val->created_at)->format('M d, Y') }}</td>
-                                                                                <td>{{ $val->attachment_title }}</td>
-                                                                                <td>
-                                                                                    <a href="{{ ($val->attachment) }}" target="_blank"><b>Download
-                                                                                            Link</b></a></td>
-                                                                                <td>View Comments</td>
-                                                                            </tr>
-                                                                        @endforeach
-                                                                        </tbody>
-                                                                    </table>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <!-- comments start -->
-                                            <div class="row default-according style-1 faq-accordion" id="accordionoc-comment-{{ $key }}">
-                                                <div class="row" style="width: 100%;">
-                                                    <div class="col-lg-12">
-                                                        <div class="card">
-                                                            <div class="card-header">
-                                                                <h5 class="mb-0">
-                                                                    <button class="btn btn-link collapsed"
-                                                                            data-toggle="collapse"
-                                                                            data-target="#assigned-comment-{{ $key }}"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="collapseicon">
-                                                                        Comment
-                                                                    </button>
-                                                                </h5>
-                                                            </div>
-                                                            <div class="collapse" id="assigned-comment-{{ $key }}"
-                                                                 aria-labelledby="collapseicon"
-                                                                 data-parent="#accordionoc-comment-{{ $key }}">
-                                                                <div class="card-body">
-                                                                    <div class="col call-chat-body">
-                                                                        <div class="card" style="-webkit-box-shadow:1px 5px 24px 0 rgba(0, 0, 0, 0.1); box-shadow: 1px 5px 24px 0 rgba(0, 0, 0, 0.1); width:100%;">
-                                                                            <div class="card-body p-0">
-                                                                                <div id="row chat-box">
-                                                                                    <div class="col chat-right-aside" style="max-width: 100% !important; flex: 0 0 100%;">
-                                                                                        <!-- chat start-->
-                                                                                        <div class="chat">
-                                                                                            <!-- chat-header end-->
-                                                                                            <div class="chat-history chat-msg-box custom-scrollbar">
-                                                                                                <div id="comment-box" style="margin-top: 15px">
-                                                                                                    @foreach($ticket->ticket_comments as $key=>$val)
-                                                                                                        @if ($val->user_id == \Illuminate\Support\Facades\Auth::user()->id)
-                                                                                                            <div class="message my-message" style="width: 100%; border: 1px solid #e8e8e8; border-radius: 10px; margin-bottom: 15px;padding: 20px">
-                                                                                                                <img class="rounded-circle float-left chat-user-img img-30" src="{{asset($val->user->profile_pic)}}" alt="{{$val->user->name}}" style="margin-top: -30px">
-                                                                                                                <div class="message-data text-right">
-                                                                                                                    <span class="message-data-time">{{ $val->updated_at  }}, {{$val->user->name}}</span>
-                                                                                                                </div>
-                                                                                                                <p>{{$val->comment_body}}</p>
-                                                                                                                <div class="row float-right" style="background-color: #efefef; border-radius: 5px;">
-                                                                                                                    <div class="col-xs-6" style="border-right: 1px solid #dedede;">
-                                                                                                                        <a href="javascript:void(0)" class="btn  btn-xs form-inline" data-toggle="modal"
-                                                                                                                           data-target="#editLeadcomment_{{$val->id}}"
-                                                                                                                           data-whatever="@getbootstrap"><i class="icon-pencil"></i></a>
-                                                                                                                    </div>
-                                                                                                                    <div class="col-xs-6">
-                                                                                                                        <form method="POST" action="{{url('deleteleadcomment')}}">
-                                                                                                                            @csrf
-                                                                                                                            <input type="hidden" name="commentid" value="{{$val->id}}">
-                                                                                                                            <button class="btn btn-xs form-inline" type="submit"><i class="icon-trash"></i></button>
-                                                                                                                        </form>
-                                                                                                                    </div>
-                                                                                                                </div>
-                                                                                                            </div>
-                                                                                                        @else
-                                                                                                            <div class="message other-message pull-right" style="width: 100%;">
-                                                                                                                <img class="rounded-circle float-right chat-user-img img-30" src="{{asset($val->user->profile_pic)}}" alt="{{$val->user->name}}" style="position: absolute;z-index: 9;right: 20px;">
-                                                                                                                <div class="message-data">
-                                                                                                                    <span class="message-data-time">{{ $val->updated_at  }}, {{$val->user->name}}</span>
-                                                                                                                </div>
-                                                                                                                <p>{{$val->comment_body}}</p>
-                                                                                                            </div>
-                                                                                                            <div class="clearfix"></div>
-                                                                                                        @endif
-                                                                                                    @endforeach
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="chat-message clearfix">
-                                                                                <div class="form-group row comment-box">
-                                                                                    <div class="col-md-1">
-                                                                                        <img class="rounded-circle float-right img-40" src="{{asset($val->user->profile_pic)}}" alt="">
-                                                                                    </div>
-                                                                                    <div class="col-md-9">
-                                                                                        {{ csrf_field() }}
-                                                                                        <input type="hidden" name="ticket_id" value="{{$ticket->id}}">
-                                                                                        <input id="leadcomment" placeholder="Add Comment" class="form-control" >
-                                                                                    </div>
-                                                                                    <div class="">
-                                                                                        <button class="btn btn-pill btn-primary text-light" type="button" id="addleadcomment"><i class="icon-angle-right"></i></button>
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {{--<div class="timeline-content">
-                                                <div class="social-chat">
-                                                    @foreach($ticket->ticket_comments as $key=>$val)
-                                                        <div class="your-msg">
-                                                            <div class="media">
-                                                                <img class="img-50 img-fluid m-r-20 rounded-circle"
-                                                                     style="margin-top: 20px;"
-                                                                     alt=""
-                                                                     src="http://localhost/martechportal/public/assets/images/user/lncg-logo-only.jpg"
-                                                                     data-original-title="" title="">
-                                                                <div class="media-body">
-                                                                <span class="f-w-600">{{ \App\User::getUserName(1) }}
-                                                                    <span>{{ \Carbon\Carbon::parse($val->created_at)->format('M d, Y')  }} </span>
-                                                                </span>
-                                                                    <p>{{ $val->comment_body }}</p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                                <div class="comments-box">
-                                                    <div class="media"><img
-                                                            class="img-50 img-fluid m-r-20 rounded-circle" alt=""
-                                                            src="../assets/images/user/1.jpg" data-original-title=""
-                                                            title="">
-                                                        <div class="media-body">
-                                                            <div class="input-group text-box">
-                                                                <input class="form-control input-txt-bx" type="text"
-                                                                       name="message_to_send"
-                                                                       id="messageSend_{{$ticket->id}}"
-                                                                       placeholder="Post Your commnets"
-                                                                       data-original-title="" title="">
-                                                                <div class="input-group-append">
-                                                                    <button class="btn btn-transparent messageAdd"
-                                                                            type="button"
-                                                                            id="messageAdd_{{ $ticket->id }}"
-                                                                            data-original-title="" title=""><i
-                                                                            class="fa fa-arrow-right"> </i></button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>--}}
-                                            <!-- comments end -->
-
-                                            <!-- buttons start -->
-                                            <div class="form-group row">
-                                                <div class="col-lg-12 text-right mt-5">
-                                                    <button type="button" class="btn btn-pill btn-primary"
-                                                            style="width:auto;">Add Task
-                                                    </button>
-                                                    <button type="button" class="btn btn-pill btn-warning"
-                                                            style="width:auto;">Add Attachment
-                                                    </button>
-                                                    <button type="button" class="btn btn-pill btn-primary"
-                                                            style="width:auto;">Copy Link
-                                                    </button>
-                                                    <button type="button" class="btn btn-pill btn-success"
-                                                            style="width:auto;">Save and Update
-                                                    </button>
-                                                </div>
-                                            </div>
-                                            <!-- buttons end -->
-
-                                        </div>
-                                    </div>
+                    <div class="col-md-12 mb-5" style="padding: 15px 0px;background: aliceblue;border:3px solid #000;border-radius: 4px">
+                        <div class="col-xl-12 col-lg-12 col-md-12">
+                            <div class="row">
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" id="search_card" placeholder="search title or ticket number">
                                 </div>
-                                <!-- text-danger text-primary text-warning text-success -->
-                            @endforeach
-                        @endif
-
+                                <div class="col-md-2"><a href="javascript:void(0)" class="btn btn-warning" id="switchtable" style="width: 100%">Switch to table</a></div>
+                            </div>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+                    <div id="card_ticket" class="col-12">
+                        @include("supportticket.card_ticket")
                     </div>
                 </div>
             </div>
@@ -656,74 +272,173 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="edit-comment-form" tabindex="-1" role="document" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="business">Edit Comment</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                </div>
+                <form action="#" method="POST" enctype="multipart/form-data">
+                    {{ csrf_field() }}
+                    <div class="modal-body">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="cname">Comment</label>
+                                        <input type="hidden" id="comment_id_form" name="comment_id">
+                                        <input required class="form-control" id="comment_form" name="title" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-pill btn-secondary" type="button" data-dismiss="modal">Close</button>
+                        <button class="btn btn-pill btn-primary" type="button" id="edit_comment">Edit comment</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
     <!--   modal end -->
 
 @endsection
 @section('script')
-    {{--    <script src="{{asset('assets/js/datatable/datatables/jquery.dataTables.min.js')}}"></script>--}}
-    {{--    <script src="{{asset('assets/js/datatable/datatables/datatable.custom.js')}}"></script>--}}
-
     <script>
-        {{--$(document).ready(function () {--}}
-        {{--    $('#tickets').DataTable({--}}
-        {{--        processing: true,--}}
-        {{--        serverSide: true,--}}
-        {{--        ajax: "{{route('getSupportTicketData')}}",--}}
-        {{--        columns: [--}}
-        {{--            {data: 'title', name: 'title'},--}}
-        {{--            {data: 'description', name: 'description'},--}}
-        {{--            {data: 'status', name: 'status'},--}}
-        {{--            {data: 'start_date', name: 'start_date'},--}}
-        {{--            {data: 'due_date', name: 'due_date'},--}}
-        {{--            {data: 'priority', name: 'priority'},--}}
-        {{--            {data: 'assigned_to', name: 'assigned_to'},--}}
-        {{--            {data: 'parent_task_id', name: 'parent_task_id'},--}}
+        $("#search_card").on('keyup',function () {
+            let val = $(this).val()
 
-        {{--        ]--}}
-        {{--    });--}}
-        {{--});--}}
+            $.ajax({
+                url: "{{ url('/searchTicket') }}",
+                type: 'get',
+                data: {
+                    search : val
+                },
+                dataType:'html',
+                success: function(data) {
+                    $("#card_ticket").html(data)
+                }
+            });
+        })
+
 
         $(document).on('click', "#addTicketId", function () {
             $('#addTicketModal').modal('show').on('shown.bs.modal', function () {
             });
         });
 
-        $(".messageAdd").click(function () {
-            let ids = $(this).attr('id');
-            let ticket_number = ids.split('_')[1];
-            let comment_txt = $("#messageSend_" + ticket_number).val();
-            var html = '';
+        function editComment(id,comment)
+        {
+            // show modal
+            $("#comment_id_form").val(id)
+            $("#comment_form").val(comment)
+            $("#edit-comment-form").modal('show')
+        }
+        function deleteComment(id)
+        {
+            $.ajax({
+                url: "{{ url('/commentDelete') }}",
+                type: 'post',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    ticket_number : id
+                },
+                dataType:'json',
+                success: function(data) {
+                    $.notify('Delete comment success', {
+                        type: 'success',
+                        allow_dismiss: true,
+                        delay: 100,
+                        timer: 300
+                    })
+                    $("#comment_box_"+id).remove()
+                }
+            });
+        }
+
+
+        $("#edit_comment").on('click',function () {
+            // update comment
+            let id = $("#comment_id_form").val()
+            let comment = $("#comment_form").val()
+            if(comment.length<2){
+                $.notify('Comment is required', {
+                    type: 'warning',
+                    allow_dismiss: true,
+                    delay: 100,
+                    timer: 300
+                })
+
+                return
+            }
+
+            $.ajax({
+                url: "{{ url('/commentEdit') }}",
+                type: 'post',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                    ticket_number : id,
+                    comment_txt : comment
+                },
+                dataType:'json',
+                success: function(data) {
+                    $.notify('Edit comment success', {
+                        type: 'success',
+                        allow_dismiss: true,
+                        delay: 100,
+                        timer: 300
+                    })
+                    $("#comment_body_"+id).text(comment)
+                    $("#edit-comment-form").modal('hide')
+                }
+            });
+        })
+
+        function addComment(id)
+        {
+
+            let id_ticket = id;
+            let comment = $("#comment_"+id_ticket).val()
+            if(comment.length<2){
+                $.notify('Comment is required', {
+                    type: 'warning',
+                    allow_dismiss: true,
+                    delay: 100,
+                    timer: 300
+                })
+
+                return
+            }
+            var btn =$("#button_add_comment_"+id);
+            $(btn).buttonLoader('start');
+
             $.ajax({
                 url: "{{ url('/commentAdd') }}",
                 type: 'post',
                 data: {
                     _token: '{{ csrf_token() }}',
-                    ticket_number : ticket_number,
-                    comment_txt : comment_txt
+                    ticket_number : id_ticket,
+                    comment_txt : comment
                 },
-
+                dataType:'html',
                 success: function(data) {
-                    console.log(data[0].name);
-                    html+= '<div class="your-msg">\n' +
-                        '     <div class="media">\n' +
-                        '         <img class="img-50 img-fluid m-r-20 rounded-circle"\n' +
-                        '              style="margin-top: 20px;"\n' +
-                        '              alt=""\n' +
-                        '              src="http://localhost/martechportal/public/assets/images/user/lncg-logo-only.jpg"\n' +
-                        '              data-original-title="" title="">\n' +
-                        '         <div class="media-body">\n' +
-                        '         <span class="f-w-600">'+data[0].name+'\n' +
-                        '             <span>'+data[0].created_at+' </span>\n' +
-                        '         </span>\n' +
-                        '             <p>'+data[0].comment_body+'</p>\n' +
-                        '         </div>\n' +
-                        '     </div>\n' +
-                        ' </div>';
-                    // console.log(html);
-                    $('.social-chat').append(html);
+                    $.notify('Add comment success', {
+                        type: 'success',
+                        allow_dismiss: true,
+                        delay: 100,
+                        timer: 300
+                    })
+                    $("#comment_"+id_ticket).val("")
+                    $('#comment-box-'+id_ticket).append(data);
+                    $(btn).buttonLoader('stop');
+                    $(btn).html('<i class="icon-angle-right"></i>');
                 }
             });
-        });
+        }
     </script>
 @endsection
 

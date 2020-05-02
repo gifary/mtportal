@@ -154,8 +154,6 @@
 @endsection
 @section('script')
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
-    <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
-    <script src="{{asset('assets/js/notify/index.js')}}"></script>
     <script>
         $(document).ready(function() {
             $('#top-users-tab').click(function(e) {

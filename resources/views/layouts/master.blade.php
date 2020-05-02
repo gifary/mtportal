@@ -7,15 +7,15 @@
     <meta name="description" content="endless admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
     <meta name="keywords" content="admin template, endless admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="pixelstrap">
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
     <link rel="icon" href="{{asset('assets/images/favicon.png')}}" type="image/x-icon">
     <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}" type="image/x-icon">
     <title>@yield('title')</title>
-    @include('layouts.style')    
+    @include('layouts.style')
   </head>
   <body  class="">
     <div class="container-fluid p-0">
-   
+
     <!-- Loader starts-->
     <div class="loader-wrapper">
       <div class="loader bg-white">
@@ -64,14 +64,14 @@
               </div>
             </div>
           </div>
-          @yield('content')           
+          @yield('content')
         </div>
         @include('layouts.footer')
       </div>
     </div>
     @include('layouts.script')
     </div>
-    
+
   </body>
-  
+
 </html>

@@ -16,4 +16,9 @@ class Business extends Model
 
         return $this->hasMany(Stack::class);
     }
+
+    public function user()
+    {
+        return $this->hasOne(User::class,'businesses','id');
+    }
 }

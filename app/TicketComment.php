@@ -19,6 +19,11 @@ class TicketComment extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
+    public function ticket()
+    {
+        return $this->belongsTo(SupportTicket::class,'ticket_id','id');
+    }
+
     public function getUpdatedAtAttribute($value)
     {
         if(Auth::check()){

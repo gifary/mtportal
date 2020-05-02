@@ -25,4 +25,5 @@
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/responsive.css')}}">
 
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/select2.css')}}">
+<link rel="stylesheet" type="text/css" href="{{asset('assets')}}/css/datatables.css">
 @stack('push_css')

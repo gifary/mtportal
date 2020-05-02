@@ -45,7 +45,7 @@ class CreateTaskAdmin extends Notification
         }
 
         return (new MailMessage)
-                    ->line("A new ticket has been posted by [{$name}] from [{$business_name}]. Please check and do the needful.")
+                    ->line("A new ticket has been posted by {$name} from {$business_name}. Please check and do the needful.")
                     ->action('Vie Ticket', url('/'));
     }
 
@@ -57,7 +57,7 @@ class CreateTaskAdmin extends Notification
             $name = $this->supportTicket->user->business->cname;
         }
         return [
-            'data'=> "A new ticket has been raised by [".$name."]"
+            'data'=> "A new ticket has been raised by ".$name.""
         ];
     }
 
