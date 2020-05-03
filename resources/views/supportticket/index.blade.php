@@ -325,7 +325,7 @@
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">×</span></button>
                 </div>
-                <form action="{{ route('save_task') }}" method="POST" enctype="multipart/form-data" id="form_add_task"">
+                <form action="{{ route('save_task') }}" method="POST" enctype="multipart/form-data" id="form_add_task">
                     <input type="hidden" name="ticket_id" id="ticket_id_of_task">
                     <div class="modal-body ">
                         <!-- Container-fluid starts-->
@@ -625,6 +625,23 @@
                     $("#addAttachmentComment").modal('show')
                 }
             });
+        }
+
+        function copyLink(value) {
+            var tempInput = document.createElement("input");
+            tempInput.style = "position: absolute; left: -1000px; top: -1000px";
+            tempInput.value = value;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempInput);
+
+            $.notify('Link copied', {
+                type: 'success',
+                allow_dismiss: true,
+                delay: 100,
+                timer: 300
+            })
         }
 
         function addCommentAttachment(e)

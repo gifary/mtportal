@@ -22,7 +22,7 @@
                                     <td>{{$ticket->ticket_type}}</td>
                                     <td>{{\Carbon\Carbon::parse($ticket->created_at)->format('d M, Y')}}</td>
                                     <td>
-                                        <a href="#" class="btn  btn-xs form-inline"><i class="icon-eye"></i></a>
+                                        <a href="{{route('show.ticket',$ticket->id)}}" class="btn  btn-xs form-inline"><i class="icon-eye"></i></a>
                                     </td>
                                 </tr>
                             @endforeach

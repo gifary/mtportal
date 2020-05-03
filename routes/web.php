@@ -89,8 +89,7 @@ Route::post('/create', 'SupportTicketController@store')->name('post_ticket');
 Route::get('/getSupportTicketData', 'SupportTicketController@getSupportTicketData')->name('getSupportTicketData');
 Route::get('/find_assigment', 'SupportTicketController@assigment')->name('find_assigment');
 Route::get('/find_business', 'SupportTicketController@business')->name('find_business');
-
-
+Route::get('/supportticket/{id}/show', 'SupportTicketController@show')->name('show.ticket');
 
 
 

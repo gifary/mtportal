@@ -413,15 +413,21 @@ class SupportTicketController extends Controller
         return Datatables::of( $tasks )->make( true );
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        //
+        if (strtolower(Auth::user()->role_user->name)=='client')
+        {
+            $ticket = SupportTicket::where('id',$id)->where('user_id',Auth::user()->id)->where('is_archived',false)->first();
+        }else{
+            $ticket = SupportTicket::where('id',$id)->where('is_archived',false)->first();
+        }
+        if(empty($ticket))
+        {
+            // redirect
+            return redirect()->route('supportticket');
+        }
+        $assignees = User::where( 'email', '!=', Auth::user()->email )->pluck( 'email','id' );
+        return view('supportticket.view_details',compact('ticket','assignees'));
     }
 
     /**
@@ -472,14 +478,22 @@ class SupportTicketController extends Controller
                     $user_from = User::find($ticket->assigned_to);
                     $user_to= User::find($request->assigned_to);
 
-                    $changes_data['assigned to']=['from'=>$user_from->email,'to'=>$user_to->email];
+                    $from = "";
+                    if(!empty($user_from)){
+                        $from = $user_from->email;
+                    }
+
+                    $changes_data['assigned to']=['from'=>$from,'to'=>$user_to->email];
                 }
 
                 if($request->assigned_by!=$ticket->assigned_by){
                     $user_from = User::find($ticket->assigned_by);
                     $user_to= User::find($request->assigned_by);
-
-                    $changes_data['assigned by']=['from'=>$user_from->email,'to'=>$user_to->email];
+                    $from = "";
+                    if(!empty($user_from)){
+                        $from = $user_from->email;
+                    }
+                    $changes_data['assigned by']=['from'=>$from,'to'=>$user_to->email];
                 }
 
                 if(count($changes_data)>0)
@@ -496,6 +510,8 @@ class SupportTicketController extends Controller
             return view( 'supportticket.add_changelog',compact('log') );
         }catch (Exception  $e){
             DB::rollBack();
+
+            return $e;
         }
     }
 

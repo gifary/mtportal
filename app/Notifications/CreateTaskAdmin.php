@@ -46,7 +46,7 @@ class CreateTaskAdmin extends Notification
 
         return (new MailMessage)
                     ->line("A new ticket has been posted by {$name} from {$business_name}. Please check and do the needful.")
-                    ->action('Vie Ticket', url('/'));
+                    ->action('Vie Ticket', url('/supportticket/'.$this->supportTicket->id));
     }
 
 

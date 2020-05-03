@@ -95,6 +95,7 @@
                                 @if(strtolower(\Illuminate\Support\Facades\Auth::user()->role_user->name)!=='client')
                                     <button type="button" class="mr-2 btn btn-pill btn-warning pull-right" id="button_submit_from_{{$ticket->id}}" data-btn-text="Save and Update" onclick="archived('{{$ticket->id}}')" style="width:auto;">Archived</button>
                                 @endif
+                                <button type="button" class="mr-2 btn btn-pill btn-primary pull-right" data-btn-text="Save and Update" onclick="copyLink('{{route("show.ticket",$ticket->id)}}')" style="width:auto;">Copy Link</button>
                             </div>
                         </div>
                     </form>
