@@ -8,10 +8,11 @@ namespace App;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class TicketAttachmentComment
- * 
+ *
  * @property int $id
  * @property int $ticket_attachment_id
  * @property int $user_id
@@ -35,4 +36,27 @@ class TicketAttachmentComment extends Model
 		'user_id',
 		'comment'
 	];
+
+	protected $with=['user'];
+
+	public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        if(Auth::check()){
+            if(!empty(Auth::user()->zone_name)){
+                $dt = Carbon::parse($value);
+                $zone = Zone::find(Auth::user()->zone_name);
+                return $dt->setTimezone($zone->zone_name)->toDateTimeString();
+            }else{
+                return $value;
+            }
+        }else{
+            return $value;
+        }
+
+    }
 }

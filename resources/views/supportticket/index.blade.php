@@ -325,9 +325,7 @@
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">×</span></button>
                 </div>
-
-                <form action="{{ route('save_task') }}" method="POST" enctype="multipart/form-data">
-                    {{ csrf_field() }}
+                <form action="{{ route('save_task') }}" method="POST" enctype="multipart/form-data" id="form_add_task"">
                     <input type="hidden" name="ticket_id" id="ticket_id_of_task">
                     <div class="modal-body ">
                         <!-- Container-fluid starts-->
@@ -337,7 +335,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="cname">Title</label>
-                                        <input required class="form-control" id="title" name="title" type="text"
+                                        <input required class="form-control" id="title_task" name="title" type="text"
                                                placeholder="Task Title">
                                     </div>
                                 </div>
@@ -348,18 +346,17 @@
                                     <div class="form-group">
                                         <div class="form-group">
                                             <label for="start_date">Due Date</label>
-                                            <input name="due_date" id="start_date" class="form-control"
+                                            <input name="due_date" id="due_date_task" class="form-control"
                                                    value="{{ date('Y-m-d') }}" id="validationCustom03" type="date"
                                                    placeholder="Start Date">
                                             <input type="hidden" name="start_date" value="{{date('Y-m-d')}}">
-                                            <input type="hidden" name="user_id" value="{{Auth::user()->id}}">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="deal_size">Attachment</label>
-                                        <input class="form-control" multiple id="attachment" name="attachment[]"
+                                        <input class="form-control" multiple id="attachment_task" name="attachment[]"
                                                type="file"
                                                accept="image/x-png,image/jpeg, .pdf, .docx, .jpeg, .png, .svg, .psd, .ai, .eps">
                                     </div>
@@ -370,7 +367,7 @@
                                     <div class="form-group">
                                         <div class="form-group">
                                             <label for="start_date">Assigned To</label>
-                                            {!! Form::select('assigned_to', $assignees, null, ['id' => 'assigned_to', 'class' => 'form-control']); !!}
+                                            {!! Form::select('assigned_to_task', $assignees, null, ['id' => 'assigned_to_task', 'class' => 'form-control']); !!}
                                         </div>
                                     </div>
                                 </div>
@@ -380,8 +377,8 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <label for="contact1">Description</label>
-                                        <textarea name="description" id="description" class="form-control"
-                                                  id="validationCustom02" placeholder="Task Description"
+                                        <textarea name="description" id="description_task" class="form-control"
+                                                  placeholder="Task Description"
                                                   required=""></textarea>
                                     </div>
                                 </div>
@@ -390,9 +387,8 @@
                     </div>
                     <div class="modal-footer">
                         <button class="btn btn-pill btn-secondary" type="button" data-dismiss="modal">Close</button>
-                        <button class="btn btn-pill btn-primary" type="submit">Create Task</button>
+                        <button class="btn btn-pill btn-primary" type="submit" id="create_task">Create Task</button>
                     </div>
-
                 </form>
             </div>
 
@@ -432,9 +428,21 @@
         </div>
     </div>
     {{-- end modal attachment --}}
+
+    {{-- start modal attachment comment --}}
+    <div class="modal fade" id="addAttachmentComment" tabindex="-1" role="document" aria-labelledby="addAttachmentComment"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div id="body_attachment_comment"></div>
+            </div>
+        </div>
+    </div>
+    {{-- end modal attachment comment --}}
 @endsection
 @section('script')
     <script>
+        var role = '{{ \Illuminate\Support\Facades\Auth::user()->role_user->name  }}'
         $("#search_card").on('keyup',function () {
             let val = $(this).val()
 
@@ -482,6 +490,27 @@
         function addAttachment(id) {
             $("#ticket_id_of_attachment").val(id)
             $("#addAttachment").modal('show');
+        }
+
+        function deleteTask(id) {
+            var url = '/supportticket/'+id+'/deleteTask'
+            $.ajax({
+                url: url,
+                type: 'delete',
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType:'json',
+                success: function(data) {
+                    $.notify('Delete success', {
+                        type: 'success',
+                        allow_dismiss: true,
+                        delay: 100,
+                        timer: 300
+                    })
+                    $("#task_row"+id).remove()
+                }
+            });
         }
 
         function deleteAttachment(id) {
@@ -565,10 +594,117 @@
             });
         }
 
-        $("#submit_attachment").on('click',function () {
-            var btn =$("#submit_attachment");
+        function showCommentAttachment(id)
+        {
+            var url = '/supportticket/'+id+'/showCommentAttachment'
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType:'html',
+                success: function(data) {
+                    $("#body_attachment_comment").html(data)
+                    $("#addAttachmentComment").modal('show')
+                }
+            });
+        }
+
+        function addCommentAttachment(e)
+        {
+            var comment = $("#comment_attachment").val()
+            var ticket_attachment_id = $("#ticket_attachment_id").val()
+            var url = '/supportticket/'+ticket_attachment_id+'/addCommentAttachment'
+            $.ajax({
+                url: url,
+                type: 'post',
+                dataType:'json',
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                data :{
+                  comment:comment
+                },
+                success: function(data) {
+                    $("#addAttachmentComment").modal('hide')
+                    $.notify('Success add comment', {
+                        type: 'success',
+                        allow_dismiss: true,
+                        delay: 100,
+                        timer: 300
+                    })
+                }
+            });
+        }
+
+        $("#form_add_task").on('submit',function(e){
+            e.preventDefault()
+            var form_data = new FormData();
+            var totalfiles = document.getElementById('attachment_task').files.length;
+            for (var index = 0; index < totalfiles; index++) {
+                form_data.append("files[]", document.getElementById('attachment_task').files[index]);
+            }
+
+            var ticket_id = $("#ticket_id_of_task").val();
+
+            form_data.append('ticket_id',ticket_id);
+            form_data.append('title',$("#title_task").val());
+            form_data.append('description',$("#description_task").val());
+            form_data.append('due_date',$("#due_date_task").val());
+            form_data.append('assigned_to',$("#assigned_to_task").val());
+
+            var btn =$("#create_task");
             $(btn).buttonLoader('start');
 
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                type:"post",
+                url: "{!! route('addTask') !!}",
+                data: form_data,
+                contentType: false,
+                processData: false,
+                dataType:'json',
+            }).done (function(data, textStatus, jqXHR){
+                // append data to table
+                let createdAt = moment(data.data.created_at).format('MMM DD , Y')
+                let title = data.data.title
+                let assignedto = data.data.assignedto.name
+                let due_date = moment(data.data.due_date).format('MMM DD , Y')
+                let id = data.data.id
+                var html=''
+
+                html+=' <tr id="task_row'+id+'">'
+                html+='<td>'+createdAt+'</td>'
+                html+='<td>'+title+'</td>'
+                html+='<td>'+assignedto+'</td>'
+                html+='<td>'+due_date+'</td>'
+                html+='<td><i class="icofont icofont-trash text-primary" onclick="deleteTask('+id+')"></i></td>'
+                html+='</tr>'
+
+                $('#table_task_'+data.data.ticket_id+' tr:last').after(html);
+
+                $(btn).buttonLoader('stop');
+                document.getElementById("form_add_task").reset();
+                $("#addTask").modal('hide');
+                $.notify('Create task success', {
+                    type: 'success',
+                    allow_dismiss: true,
+                    delay: 100,
+                    timer: 300
+                })
+
+            }).fail (function(jqXHR, textStatus, errorThrown){
+                $.notify('Something wrong', {
+                    type: 'warning',
+                    allow_dismiss: true,
+                    delay: 100,
+                    timer: 300
+                })
+                $(btn).buttonLoader('stop');
+            });
+        })
+
+        $("#submit_attachment").on('click',function () {
             var files = $('#attachment_attachment')[0].files[0];
             if(files===undefined)
             {
@@ -584,6 +720,9 @@
 
             fd.append('file',files);
             fd.append('ticket_id',$("#ticket_id_of_attachment").val());
+
+            var btn =$("#submit_attachment");
+            $(btn).buttonLoader('start');
 
             $.ajax({
                 headers: {
@@ -603,8 +742,18 @@
                 var html = '<tr id="attachment_row_'+id+'">'
                 html+='<td>'+createdAt+'</td>'
                 html+='<td>'+data.data.attachment_title+'</td>'
-                html+='<td><a href="'+data.data.attachment+'" target="_blank"><i class="icofont icofont-download-alt"></i></a>' +
-                    '  <i class="icofont icofont-trash text-primary" onclick="deleteAttachment('+id+')"></i></td>'
+                if(role.toLowerCase()!=='client')
+                {
+                    html+='<td><a href="'+data.data.attachment+'" target="_blank"><i class="icofont icofont-download-alt"></i></a>' +
+                        ' <a onclick="showCommentAttachment('+id+');return false" href="#"><i class="icofont icofont-chat text-primary"></i></a>' +
+                        '  <a onclick="deleteAttachment('+id+');return false" href=""><i class="icofont icofont-trash text-danger"></i></a></td>'
+                }else{
+                    html+='<td>' +
+                        '<a href="'+data.data.attachment+'" target="_blank"><i class="icofont icofont-download-alt"></i></a>' +
+                        '<a onclick="showCommentAttachment('+id+');return false" href="#"><i class="icofont icofont-chat text-primary"></i></a>' +
+                        ' </td>'
+                }
+
                 html+='</tr>'
                 $('#table_attachment_'+data.data.ticket_id+' tr:last').after(html);
                 $("#addAttachment").modal('hide');

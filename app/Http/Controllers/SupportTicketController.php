@@ -8,16 +8,21 @@ use App\Notifications\AddComment;
 use App\Notifications\CreateTask;
 use App\Notifications\CreateTaskAdmin;
 use App\SupportTicket;
+use App\Task;
 use App\TicketAttachment;
+use App\TicketAttachmentComment;
 use App\TicketComment;
 use App\TaskComment;
 use App\AttachmentComment;
 use App\TicketLog;
+use App\TuskAttachment;
 use App\User;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Role;
 use Yajra\Datatables\Datatables;
 
@@ -545,6 +550,23 @@ class SupportTicketController extends Controller
         return response()->json(['message'=>'success']);
     }
 
+    public function deleteTask($id)
+    {
+        $task = Task::find($id);
+        if(!empty($id))
+        {
+            foreach ($task->attachment as $attachment)
+            {
+                @unlink(public_path() . $attachment->attachment);
+                $attachment->delete();
+            }
+
+            $task->delete();
+        }
+
+        return response()->json(['message'=>'success']);
+    }
+
     public function addAttachment(Request $request)
     {
 
@@ -566,5 +588,54 @@ class SupportTicketController extends Controller
         }catch (Exception $e){
             return response()->json(['message'=>$e->getMessage()]);
         }
+    }
+
+    public function addTask(Request $request)
+    {
+        try{
+            $data_task = $request->except(['files']);
+            $data_task['user_id'] = Auth::user()->id;
+            $data_task['start_date']= Carbon::now()->toDateString();
+            $task = Task::create($data_task);
+
+            if ($request->has('files')) {
+                $images = $request->file('files');
+                foreach ($images as $key => $image) {
+                    $image_name = Str::random(16);
+                    $ext = strtolower($image->getClientOriginalExtension());
+                    $image_fullname = $image_name . '.' . $ext;
+                    $upload_path =public_path()."/storage/task/";
+                    $image_url = "/storage/task/" . $image_fullname;
+                    $success = $image->move($upload_path, $image_fullname);
+                    $attachment = array();
+                    $attachment['attachment'] = $image_url;
+                    $attachment['task_id'] = $task->id;
+                    $attachment['attachment_title'] = $image->getClientOriginalName();
+                    TuskAttachment::create($attachment);
+                }
+            }
+
+            return response()->json(['message'=>'success','data'=>Task::find($task->id)]);
+        }catch (Exception $e){
+            return response()->json(['message'=>$e->getMessage()]);
+        }
+    }
+
+    public function showCommentAttachment($id)
+    {
+        $attachment = TicketAttachment::find($id);
+
+        return view( 'supportticket.comment_attachment',compact('attachment') );
+    }
+
+    public function addCommentAttachment(Request $request, $id)
+    {
+        $data['ticket_attachment_id']=$id;
+        $data['comment'] = $request->comment;
+        $data['user_id'] = Auth::user()->id;
+
+        $ticket_comment = TicketAttachmentComment::create($data);
+
+        return response()->json(['message'=>'success','data'=>$ticket_comment]);
     }
 }

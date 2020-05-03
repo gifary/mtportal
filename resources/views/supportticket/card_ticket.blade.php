@@ -45,47 +45,50 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label class="control-label" for="textinput">Priority</label>
-                                    {!! Form::select('priority', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower'), $ticket->priority, ['id' => 'priority', 'class' => 'form-control']); !!}
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label class="control-label" for="textinput">Ticket Type</label>
-                                    {!! Form::select('ticket_type', array('Open' => 'Open', 'Assigned' => 'Assigned', 'New' => 'New','Resolved'=>'Resolved'), $ticket->ticket_type, ['id' => 'priority', 'class' => 'form-control']); !!}
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label class="control-label" for="textinput">Assigned By</label>
-                                    {!! Form::select('assigned_by', $assignees, $ticket->assigned_to, ['id' => 'assigned_by', 'class' => 'form-control']); !!}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label class="control-label" for="textinput">Assigned To</label>
-                                    {!! Form::select('assigned_to', $assignees, $ticket->assigned_to, ['id' => 'assigned_to', 'class' => 'form-control']); !!}
-                                </div>
-                            </div>
+                        @if(strtolower(\Illuminate\Support\Facades\Auth::user()->role_user->name)!=='client')
+                            <div class="row">
 
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label class="control-label" for="textinput">Start Date</label>
-                                    <input id="textinput" name="start_date" type="date" placeholder="Date" class="form-control" value="{{$ticket->start_date}}">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="control-label" for="textinput">Priority</label>
+                                        {!! Form::select('priority', array('Higher' => 'Higher', 'Medium' => 'Medium', 'Lower' => 'Lower'), $ticket->priority, ['id' => 'priority', 'class' => 'form-control']); !!}
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="control-label" for="textinput">Ticket Type/Status</label>
+                                        {!! Form::select('ticket_type', array('Open' => 'Open', 'Assigned' => 'Assigned', 'New' => 'New','Resolved'=>'Resolved'), $ticket->ticket_type, ['id' => 'priority', 'class' => 'form-control']); !!}
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="control-label" for="textinput">Assigned By</label>
+                                        {!! Form::select('assigned_by', $assignees, $ticket->assigned_to, ['id' => 'assigned_by', 'class' => 'form-control']); !!}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="form-group">
-                                    <label class="control-label" for="textinput">Due Date</label>
-                                    <input id="textinput" name="due_date" type="date" placeholder="Date" class="form-control" value="{{$ticket->due_date}}">
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="control-label" for="textinput">Assigned To</label>
+                                        {!! Form::select('assigned_to', $assignees, $ticket->assigned_to, ['id' => 'assigned_to', 'class' => 'form-control']); !!}
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="control-label" for="textinput">Start Date</label>
+                                        <input id="textinput" name="start_date" type="date" placeholder="Date" class="form-control" value="{{$ticket->start_date}}">
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="form-group">
+                                        <label class="control-label" for="textinput">Due Date</label>
+                                        <input id="textinput" name="due_date" type="date" placeholder="Date" class="form-control" value="{{$ticket->due_date}}">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                         <div class="row">
                             <div class="col-12">
                                 <button type="button" class="btn btn-pill btn-success pull-right" id="button_submit_from_{{$ticket->id}}" data-btn-text="Save and Update" onclick="submitForm('{{$ticket->id}}')" style="width:auto;">Save and Update</button>
@@ -93,54 +96,55 @@
                         </div>
                     </form>
                     {{-- tab change log--}}
-                    <div class="row default-according style-1 faq-accordion" id="accordionoc-sub-{{ $key }}">
-                        <div class="row" style="width: 100%;">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0">
-                                            <button class="btn btn-link collapsed"
-                                                    data-toggle="collapse"
-                                                    data-target="#changelog-{{ $key }}"
-                                                    aria-expanded="false"
-                                                    aria-controls="collapseicon">
-                                                Change Log
-                                            </button>
-                                        </h5>
-                                    </div>
-                                    <div class="collapse" id="changelog-{{ $key }}"
-                                         aria-labelledby="collapseicon"
-                                         data-parent="#accordionoc-sub-{{ $key }}">
-                                        <div class="card-body" id="child_change_log_{{$ticket->id}}">
-                                            @foreach($ticket->logs as $log)
-                                                <div class="row default-according style-1 faq-accordion" id="toogle_log{{ $log->id }}" style="margin-top: -20px">
-                                                    <div class="row" style="width: 100%;">
-                                                        <div class="col-lg-12">
-                                                            <div class="card">
-                                                                <div class="card-header">
-                                                                    <h5 class="mb-0">
-                                                                        <button class="btn btn-link collapsed"
-                                                                                data-toggle="collapse"
-                                                                                data-target="#toogle_log-{{ $log->id }}"
-                                                                                aria-expanded="false"
-                                                                                aria-controls="collapseicon">
-                                                                            {{$log->user->name}}, {{ $log->updated_at }}
-                                                                        </button>
-                                                                    </h5>
-                                                                </div>
-                                                                <div class="collapse" id="toogle_log-{{ $log->id }}"
-                                                                     aria-labelledby="collapseicon"
-                                                                     data-parent="#toogle_logb-{{ $log->id }}">
-                                                                    <div class="card-body">
-                                                                        <table class="table table-striped">
-                                                                            <thead>
+                    @if(strtolower(\Illuminate\Support\Facades\Auth::user()->role_user->name)!=='client')
+                        <div class="row default-according style-1 faq-accordion" id="accordionoc-sub-{{ $key }}">
+                            <div class="row" style="width: 100%;">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link collapsed"
+                                                        data-toggle="collapse"
+                                                        data-target="#changelog-{{ $key }}"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapseicon">
+                                                    Change Log
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div class="collapse" id="changelog-{{ $key }}"
+                                             aria-labelledby="collapseicon"
+                                             data-parent="#accordionoc-sub-{{ $key }}">
+                                            <div class="card-body" id="child_change_log_{{$ticket->id}}">
+                                                @foreach($ticket->logs as $log)
+                                                    <div class="row default-according style-1 faq-accordion" id="toogle_log{{ $log->id }}" style="margin-top: -20px">
+                                                        <div class="row" style="width: 100%;">
+                                                            <div class="col-lg-12">
+                                                                <div class="card">
+                                                                    <div class="card-header">
+                                                                        <h5 class="mb-0">
+                                                                            <button class="btn btn-link collapsed"
+                                                                                    data-toggle="collapse"
+                                                                                    data-target="#toogle_log-{{ $log->id }}"
+                                                                                    aria-expanded="false"
+                                                                                    aria-controls="collapseicon">
+                                                                                {{$log->user->name}}, {{ $log->updated_at }}
+                                                                            </button>
+                                                                        </h5>
+                                                                    </div>
+                                                                    <div class="collapse" id="toogle_log-{{ $log->id }}"
+                                                                         aria-labelledby="collapseicon"
+                                                                         data-parent="#toogle_logb-{{ $log->id }}">
+                                                                        <div class="card-body">
+                                                                            <table class="table table-striped">
+                                                                                <thead>
                                                                                 <tr>
                                                                                     <th>Label</th>
                                                                                     <th>From</th>
                                                                                     <th>To</th>
                                                                                 </tr>
-                                                                            </thead>
-                                                                            <tbody>
+                                                                                </thead>
+                                                                                <tbody>
                                                                                 @foreach(json_decode($log->data) as $key_change=>$data)
                                                                                     <tr>
                                                                                         <td>{{ $key_change }}</td>
@@ -148,73 +152,79 @@
                                                                                         <td> {{ $data->to  }}</td>
                                                                                     </tr>
                                                                                 @endforeach
-                                                                            </tbody>
-                                                                        </table>
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {{-- tab assigned tasks --}}
-                    <div class="row default-according style-1 faq-accordion" id="accordionoc-tasks-{{ $key }}" style="margin-top: -20px">
-                        <div class="row" style="width: 100%;">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h5 class="mb-0 d-inline-block" style="width: 70%">
-                                            <button class="btn btn-link collapsed"
-                                                    data-toggle="collapse"
-                                                    data-target="#assigned-tasks-{{ $key }}"
-                                                    aria-expanded="false"
-                                                    aria-controls="collapseicon">
-                                                Assigned Tasks
-                                            </button>
-                                        </h5>
-                                        <button type="button" class="btn btn-pill btn-primary pull-right" style="width:auto; margin-right: 40px;" onclick="addTask('{{$ticket->id}}')">Add</button>
-                                    </div>
-                                    <div class="collapse" id="assigned-tasks-{{ $key }}"
-                                         aria-labelledby="collapseicon"
-                                         data-parent="#accordionoc-tasks-{{ $key }}">
-                                        <div class="card-body">
-                                            <table class="table table-bordered table-hover table-striped">
-                                                <thead>
-                                                <tr>
-                                                    <th>Assigned Date</th>
-                                                    <th>Task Title</th>
-                                                    <th>Assigned To</th>
-                                                    <th>Due Date</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @foreach($ticket->tasks as $task)
-                                                    <tr>
-                                                        <td>{{ \Carbon\Carbon::parse($task->created_at)->format('d M, Y')  }}</td>
-                                                        <td>{{$task->title}}</td>
-                                                        <td>{{$task->assignedto->name}}</td>
-                                                        <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d M, Y')  }}</td>
-                                                        <td>
-
-                                                        </td>
-                                                    </tr>
                                                 @endforeach
-                                                </tbody>
-                                            </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-                    </div>
+                    @endif
+
+                    @if(strtolower(\Illuminate\Support\Facades\Auth::user()->role_user->name)!=='client')
+                        {{-- tab assigned tasks --}}
+                        <div class="row default-according style-1 faq-accordion" id="accordionoc-tasks-{{ $key }}" style="margin-top: -20px">
+                            <div class="row" style="width: 100%;">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h5 class="mb-0 d-inline-block" style="width: 70%">
+                                                <button class="btn btn-link collapsed"
+                                                        data-toggle="collapse"
+                                                        data-target="#assigned-tasks-{{ $key }}"
+                                                        aria-expanded="false"
+                                                        aria-controls="collapseicon">
+                                                    Assigned Tasks
+                                                </button>
+                                            </h5>
+                                            <button type="button" class="btn btn-pill btn-primary pull-right" style="width:auto; margin-right: 40px;" onclick="addTask('{{$ticket->id}}')">Add</button>
+                                        </div>
+                                        <div class="collapse" id="assigned-tasks-{{ $key }}"
+                                             aria-labelledby="collapseicon"
+                                             data-parent="#accordionoc-tasks-{{ $key }}">
+                                            <div class="card-body">
+                                                <table class="table table-bordered table-hover table-striped" id="table_task_{{$ticket->id}}">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Assigned Date</th>
+                                                        <th>Task Title</th>
+                                                        <th>Assigned To</th>
+                                                        <th>Due Date</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr></tr>
+                                                    @foreach($ticket->tasks as $task)
+                                                        <tr id="task_row{{$task->id}}">
+                                                            <td>{{ \Carbon\Carbon::parse($task->created_at)->format('d M, Y')  }}</td>
+                                                            <td>{{$task->title}}</td>
+                                                            <td>{{$task->assignedto->name}}</td>
+                                                            <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d M, Y')  }}</td>
+                                                            <td>
+                                                                <i class="icofont icofont-trash text-primary" onclick="deleteTask('{{$task->id}}')"></i>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     {{-- tab attachment --}}
                     <div class="row default-according style-1 faq-accordion" id="accordionoc-attachment-{{ $key }}" style="margin-top: -20px">
                         <div class="row" style="width: 100%;">
@@ -238,13 +248,17 @@
                                         <div class="card-body">
                                             <table class="table table-bordered table-hover table-striped" id="table_attachment_{{$ticket->id}}">
                                                 <tbody>
-                                                @foreach($ticket->ticket_attachments as $val)
-                                                    <tr id="attachment_row_{{$val->id}}">
-                                                        <td>{{ \Illuminate\Support\Carbon::parse($val->created_at)->format('M d, Y') }}</td>
-                                                        <td>{{ $val->attachment_title }}</td>
+                                                <tr></tr>
+                                                @foreach($ticket->ticket_attachments as $ta)
+                                                    <tr id="attachment_row_{{$ta->id}}">
+                                                        <td>{{ \Illuminate\Support\Carbon::parse($ta->created_at)->format('M d, Y') }}</td>
+                                                        <td>{{ $ta->attachment_title }}</td>
                                                         <td>
-                                                            <a href="{{ ($val->attachment) }}" target="_blank"><i class="icofont icofont-download-alt"></i></a>
-                                                            <i class="icofont icofont-trash text-primary" onclick="deleteAttachment('{{$val->id}}')"></i>
+                                                            <a href="{{ ($ta->attachment) }}" target="_blank"><i class="icofont icofont-download-alt"></i></a>
+                                                            <a onclick="showCommentAttachment('{{$ta->id}}');return false" href="#"><i class="icofont icofont-chat text-primary"></i></a>
+                                                            @if(strtolower(\Illuminate\Support\Facades\Auth::user()->role_user->name)!=='client')
+                                                                <a onclick="deleteAttachment('{{$ta->id}}');return false" href="#"><i class="icofont icofont-trash text-danger"></i></a>
+                                                            @endif
                                                         </td>
                                                     </tr>
                                                 @endforeach

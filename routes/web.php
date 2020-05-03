@@ -76,6 +76,10 @@ Route::get('/searchTicket', 'SupportTicketController@searchTicket')->name('searc
 Route::put('/supportticket/{id}', 'SupportTicketController@update')->name('update.ticket');
 Route::delete('/supportticket/{id}/deleteAttachment', 'SupportTicketController@deleteAttachment')->name('deleteAttachment');
 Route::post('/addAttachment', 'SupportTicketController@addAttachment')->name('addAttachment');
+Route::post('/addTask', 'SupportTicketController@addTask')->name('addTask');
+Route::delete('/supportticket/{id}/deleteTask', 'SupportTicketController@deleteTask')->name('deleteTask');
+Route::get('/supportticket/{id}/showCommentAttachment', 'SupportTicketController@showCommentAttachment')->name('showCommentAttachment');
+Route::post('/supportticket/{id}/addCommentAttachment', 'SupportTicketController@addCommentAttachment')->name('addCommentAttachment');
 
 Route::get('/create', 'SupportTicketController@create')->name('add_ticket_page');
 

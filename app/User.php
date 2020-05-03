@@ -46,7 +46,7 @@ class User extends Authenticatable
     	return $names;
     }
 
-    protected $with =['role_user'];
+    protected $with =['role_user','business'];
 
     public function role_user(){
         return $this->belongsTo(Role::class,'role');
