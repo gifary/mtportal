@@ -80,6 +80,7 @@ Route::post('/addTask', 'SupportTicketController@addTask')->name('addTask');
 Route::delete('/supportticket/{id}/deleteTask', 'SupportTicketController@deleteTask')->name('deleteTask');
 Route::get('/supportticket/{id}/showCommentAttachment', 'SupportTicketController@showCommentAttachment')->name('showCommentAttachment');
 Route::post('/supportticket/{id}/addCommentAttachment', 'SupportTicketController@addCommentAttachment')->name('addCommentAttachment');
+Route::get('/supportticket/{id}/archived', 'SupportTicketController@archived')->name('archived');
 
 Route::get('/create', 'SupportTicketController@create')->name('add_ticket_page');
 

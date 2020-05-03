@@ -1,6 +1,6 @@
 @if(!empty($tickets))
     @foreach($tickets as $key => $ticket)
-        <div class="card">
+        <div class="card" id="card_ticket_{{$ticket->id}}">
             <div class="card-header">
                 <h5 class="mb-0">
                     <button style="white-space: normal;" class="btn btn-link collapsed d-inline-block" data-toggle="collapse"
@@ -18,15 +18,15 @@
                         @endif
 
                         <div class="row task-acc-full-details">
-                            <div class="col-md-7 task-title-res">
+                            <div class="col-md-7 task-title-res" style="overflow: hidden">
                                 <span>{{$ticket->ticket_number}} {{$ticket->title}}</span>
                             </div>
                             <div class="col-md-4 task-acc-right">
                                 <div class="res-thumblins task-acc-details">
-                                    <p>{{$ticket->user->business!=null ? $ticket->user->business->cname : ''}}</p>
+                                    <p>{{!empty($ticket->user->business) ? $ticket->user->business->cname : ''}}</p>
                                     <p>{{ \Carbon\Carbon::parse($ticket->created_at)->format('d M, Y')  }}</p>
                                     <img class="attachedTo_logo" style="float: left;width: 30px;height: 30px;border-radius: 25px;border: .5px solid #51ea86;margin-top: -5px;"
-                                         src=" @if ($ticket->user->profile_pic !=Null){{asset($ticket->user->profile_pic)}} @else {{asset('/')}}assets/images/other-images/receiver-img.jpg @endif" />
+                                         src=" @if (!empty($ticket->user) && $ticket->user->profile_pic != null){{asset($ticket->user->profile_pic)}} @else {{asset('/')}}assets/images/other-images/receiver-img.jpg @endif" />
 
                                 </div>
                             </div>
@@ -92,6 +92,9 @@
                         <div class="row">
                             <div class="col-12">
                                 <button type="button" class="btn btn-pill btn-success pull-right" id="button_submit_from_{{$ticket->id}}" data-btn-text="Save and Update" onclick="submitForm('{{$ticket->id}}')" style="width:auto;">Save and Update</button>
+                                @if(strtolower(\Illuminate\Support\Facades\Auth::user()->role_user->name)!=='client')
+                                    <button type="button" class="mr-2 btn btn-pill btn-warning pull-right" id="button_submit_from_{{$ticket->id}}" data-btn-text="Save and Update" onclick="archived('{{$ticket->id}}')" style="width:auto;">Archived</button>
+                                @endif
                             </div>
                         </div>
                     </form>

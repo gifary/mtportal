@@ -564,6 +564,25 @@
             });
         }
 
+        function archived(id)
+        {
+            var url = '/supportticket/'+id+'/archived'
+            $.ajax({
+                url: url,
+                type: 'get',
+                dataType:'json',
+                success: function(data) {
+                    $("#card_ticket_"+id).remove()
+                    $.notify('Success archived', {
+                        type: 'success',
+                        allow_dismiss: true,
+                        delay: 100,
+                        timer: 300
+                    })
+                }
+            });
+        }
+
         function editComment(id,comment)
         {
             // show modal

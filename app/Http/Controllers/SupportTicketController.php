@@ -35,11 +35,21 @@ class SupportTicketController extends Controller
 
         $ticket_counts             = [];
 
-        $new = SupportTicket::where( 'ticket_type', 'New' );
-        $assigned = SupportTicket::where( 'ticket_type', 'Assigned' );
-        $open = SupportTicket::where( 'ticket_type', 'Open' );
-        $resolved = SupportTicket::where( 'ticket_type', 'Resolved' );
-        $tickets = SupportTicket::with( [ 'ticket_attachments', 'ticket_comments' ] );
+        $new = SupportTicket::where( 'ticket_type', 'New' )->where(function ($q){
+            $q->where('is_archived',false)->orWhereNull('is_archived');
+        });
+        $assigned = SupportTicket::where( 'ticket_type', 'Assigned' )->where(function ($q){
+            $q->where('is_archived',false)->orWhereNull('is_archived');
+        });
+        $open = SupportTicket::where( 'ticket_type', 'Open' )->where(function ($q){
+            $q->where('is_archived',false)->orWhereNull('is_archived');
+        });
+        $resolved = SupportTicket::where( 'ticket_type', 'Resolved' )->where(function ($q){
+            $q->where('is_archived',false)->orWhereNull('is_archived');
+        });
+        $tickets = SupportTicket::with( [ 'ticket_attachments', 'ticket_comments' ] )->where(function ($q){
+            $q->where('is_archived',false)->orWhereNull('is_archived');
+        });
 
         //validate if login user is client
         if (strtolower(Auth::user()->role_user->name)=='client')
@@ -172,7 +182,7 @@ class SupportTicketController extends Controller
 
         $tickets                   = $tickets
                 ->orderBy( 'id', 'desc' )
-                ->take(1)->get();
+                ->get();
 
         //dd(json_decode($tickets[0]->logs()->first()->data));
 
@@ -183,7 +193,9 @@ class SupportTicketController extends Controller
 
     public function searchTicket(Request $request)
     {
-        $tickets = SupportTicket::with( [ 'ticket_attachments', 'ticket_comments' ] );
+        $tickets = SupportTicket::with( [ 'ticket_attachments', 'ticket_comments' ] )->where(function ($q){
+            $q->where('is_archived',false)->orWhereNull('is_archived');
+        });
 
         if (strtolower(Auth::user()->role_user->name)=='client')
         {
@@ -637,5 +649,13 @@ class SupportTicketController extends Controller
         $ticket_comment = TicketAttachmentComment::create($data);
 
         return response()->json(['message'=>'success','data'=>$ticket_comment]);
+    }
+
+    public function archived($id)
+    {
+        $ticket = SupportTicket::find($id);
+        $ticket->is_archived=true;
+        $ticket->save();
+        return response()->json(['message'=>'success','data'=>$ticket]);
     }
 }

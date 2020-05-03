@@ -19,7 +19,8 @@ class SupportTicket extends Model
         'ticket_number',
         'user_id',
         'assigned_to',
-        'assigned_by'
+        'assigned_by',
+        'is_archived'
 	];
 
     protected $with =[
