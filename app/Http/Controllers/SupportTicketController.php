@@ -544,4 +544,27 @@ class SupportTicketController extends Controller
 
         return response()->json(['message'=>'success']);
     }
+
+    public function addAttachment(Request $request)
+    {
+
+        try{
+            $file            = $request->file( 'file' );
+            $destinationPath = public_path( '/storage/images/' );
+            $real_name       = $file->getClientOriginalName();
+            $filename        = time() . '.' . $real_name;
+            $file->move( $destinationPath, $filename );
+
+            $ticket_attachment                   = new TicketAttachment();
+            $ticket_attachment->ticket_id        = $request->ticket_id;
+            $ticket_attachment->attachment_title = $real_name;
+            $ticket_attachment->attachment       =  "/storage/images/" . $filename;
+            $ticket_attachment->save();
+
+            return response()->json(['message'=>'success','data'=>$ticket_attachment]);
+
+        }catch (Exception $e){
+            return response()->json(['message'=>$e->getMessage()]);
+        }
+    }
 }

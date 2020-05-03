@@ -28,6 +28,7 @@
 <script src="{{asset('assets')}}/js/datatable/datatables/jquery.dataTables.min.js"></script>
 <script src="{{asset('assets')}}/js/datatable/datatables/datatable.custom.js"></script>
 <script src="{{asset('assets/js/jquery.buttonLoader.js')}}"></script>
+<script src="{{asset('assets/js/moment.min.js')}}"></script>
 
 <script>
     $(document).ready(function() {

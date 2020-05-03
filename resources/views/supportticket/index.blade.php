@@ -570,6 +570,18 @@
             $(btn).buttonLoader('start');
 
             var files = $('#attachment_attachment')[0].files[0];
+            if(files===undefined)
+            {
+                $.notify('Attachment required', {
+                    type: 'warning',
+                    allow_dismiss: true,
+                    delay: 100,
+                    timer: 300
+                })
+                return
+            }
+            var fd = new FormData();
+
             fd.append('file',files);
             fd.append('ticket_id',$("#ticket_id_of_attachment").val());
 
@@ -578,13 +590,38 @@
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 },
                 type:"post",
-                url: "{!! route('admin.list_ppid.verify') !!}",
+                url: "{!! route('addAttachment') !!}",
                 data: fd,
                 contentType: false,
-                processData: false
+                processData: false,
+                dataType:'json',
             }).done (function(data, textStatus, jqXHR){
+                let id = data.data.id
+                let createdAt = moment(data.data.created_at).format('MMM DD , Y')
+                $("#attachment_attachment").val('')
+                // append to table attachment
+                var html = '<tr id="attachment_row_'+id+'">'
+                html+='<td>'+createdAt+'</td>'
+                html+='<td>'+data.data.attachment_title+'</td>'
+                html+='<td><a href="'+data.data.attachment+'" target="_blank"><i class="icofont icofont-download-alt"></i></a>' +
+                    '  <i class="icofont icofont-trash text-primary" onclick="deleteAttachment('+id+')"></i></td>'
+                html+='</tr>'
+                $('#table_attachment_'+data.data.ticket_id+' tr:last').after(html);
+                $("#addAttachment").modal('hide');
+                $.notify('Upload success', {
+                    type: 'success',
+                    allow_dismiss: true,
+                    delay: 100,
+                    timer: 300
+                })
                 $(btn).buttonLoader('stop');
             }).fail (function(jqXHR, textStatus, errorThrown){
+                $.notify('Something wrong', {
+                    type: 'warning',
+                    allow_dismiss: true,
+                    delay: 100,
+                    timer: 300
+                })
                 $(btn).buttonLoader('stop');
             });
         });

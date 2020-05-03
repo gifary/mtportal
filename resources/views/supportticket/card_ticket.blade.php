@@ -236,7 +236,7 @@
                                          aria-labelledby="collapseicon"
                                          data-parent="#accordionoc-attachment-{{ $key }}">
                                         <div class="card-body">
-                                            <table class="table table-bordered table-hover table-striped">
+                                            <table class="table table-bordered table-hover table-striped" id="table_attachment_{{$ticket->id}}">
                                                 <tbody>
                                                 @foreach($ticket->ticket_attachments as $val)
                                                     <tr id="attachment_row_{{$val->id}}">
